@@ -1,0 +1,14 @@
+{
+  "name": "route-express-app",
+  "version": "1.0.0",
+  "description": "routing demo",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.2"
+  }
+}

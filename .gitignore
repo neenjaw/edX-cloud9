@@ -1,3 +1,6 @@
 intro-to-npm/demo-app/node_modules
 intro-to-npm/my-shop/node_modules
+
 intro-to-express/first-app/node_modules
+intro-to-express/package-json-file/node_modules
+intro-to-express/route-express-app/node_modules
