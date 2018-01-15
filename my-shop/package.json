@@ -1,0 +1,14 @@
+{
+  "name": "my-shop",
+  "version": "1.0.0",
+  "description": "shop app",
+  "main": "listProducts.js",
+  "scripts": {
+    "test": "node listProducts.js"
+  },
+  "author": "Tim Austin",
+  "license": "ISC",
+  "dependencies": {
+    "faker": "^4.1.0"
+  }
+}

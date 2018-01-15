@@ -1,4 +1,0 @@
-# Intro to NPM
-
-## Objectives
-
