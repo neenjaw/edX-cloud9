@@ -1,0 +1,19 @@
+{
+  "name": "ejs-demo",
+  "version": "1.0.0",
+  "description": "EJS Demo",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js"
+  },
+  "keywords": [
+    "node",
+    "express"
+  ],
+  "author": "Tim Austin",
+  "license": "ISC",
+  "dependencies": {
+    "ejs": "^2.5.7",
+    "express": "^4.16.2"
+  }
+}
