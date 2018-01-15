@@ -1,0 +1,21 @@
+{
+  "name": "hbs-demo",
+  "version": "1.0.0",
+  "description": "HBS Demo",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js"
+  },
+  "keywords": [
+    "node",
+    "express"
+  ],
+  "author": "Tim Austin",
+  "license": "ISC",
+  "dependencies": {
+    "ejs": "^2.5.7",
+    "express": "^4.16.2",
+    "express-hbs": "^1.0.4",
+    "path": "^0.12.7"
+  }
+}
