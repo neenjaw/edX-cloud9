@@ -1,2 +1,3 @@
-demo-app/node_modules
-my-shop/node_modules
+intro-to-npm/demo-app/node_modules
+intro-to-npm/my-shop/node_modules
+intro-to-express/first-app/node_modules
