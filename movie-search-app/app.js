@@ -9,25 +9,21 @@ app.use(express.static("public"));
 app.set("view engine", "ejs");
 
 app.get("/", (req, res) => {
-  console.log("GET: home");
-  res.render("home");
+  res.render("search");
 });
 
-// app.post("/search/:query", (req, res) => {
-//   console.log("POST: search");
-//   res.redirect("/results");
-// });
-
 app.get("/results", (req, res) => {
-  let url = "http://www.omdbapi.com/?s=star&apikey=thewdb";
+  let search = req.query.search,
+      url = `http://www.omdbapi.com/?s=${search}&apikey=thewdb`;
 
   request(url, (error, response, body) => {
     if (!error && response.statusCode == 200) {
 
       let results = JSON.parse(body);
+      console.log(results);
 
       // res.send(results["Search"]);
-      res.render("results", {results: results["Search"]});
+      res.render("results", {results});
     } else {
       //Error
     }
