@@ -1,0 +1,16 @@
+<% include partials/header %>
+
+<h1>Campground Listing</h1>
+
+<% include partials/nav %>
+
+<% if (campgrounds) {
+  campgrounds.forEach((campground) => { %>
+    <div>
+      <h4><%= campground.name %></h4>
+      <img src="<%= campground.image %>">
+    </div>
+  <% });
+} %>
+
+<% include partials/footer %>

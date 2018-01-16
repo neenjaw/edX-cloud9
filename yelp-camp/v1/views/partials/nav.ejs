@@ -1,0 +1,11 @@
+<%
+function isActive(currentPageName, targetPageName) {
+  return currentPageName === targetPageName;
+}
+%>
+
+<ul>
+  <li><a href="/" class="<%= (isActive(pageName, 'home'))?'active':'' %>">Home</a></li>
+  <li><a href="/campgrounds" class="<%= (isActive(pageName, 'campgrounds'))?'active':'' %>">View All Campgrounds</a></li>
+  <li><a href="/campgrounds/new" class="<%= (isActive(pageName, 'new'))?'active':'' %>">New Campgrounds</a></li>
+</ul>
