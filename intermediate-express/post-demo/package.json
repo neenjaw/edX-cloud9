@@ -1,0 +1,16 @@
+{
+  "name": "post-demo",
+  "version": "1.0.0",
+  "description": "post demo",
+  "main": "app.js",
+  "scripts": {
+    "test": "node app.js"
+  },
+  "author": "Tim Austin",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "ejs": "^2.5.7",
+    "express": "^4.16.2"
+  }
+}
