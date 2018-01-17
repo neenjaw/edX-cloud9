@@ -7,12 +7,12 @@ let campgrounds = [
     image: "https://farm2.staticflickr.com/1281/4684194306_18ebcdb01c.jpg"
   },
   {
-    name: 'Snow Bowl',
-    image: "https://farm2.staticflickr.com/1424/1430198323_c26451b047.jpg"
-  },
-  {
     name: 'Tekkara',
     image: "https://farm9.staticflickr.com/8167/7121865553_e1c6a31f07.jpg"
+  },
+  {
+    name: 'Snow Bowl',
+    image: "https://farm2.staticflickr.com/1424/1430198323_c26451b047.jpg"
   },
   {
     name: 'Signal',
@@ -21,6 +21,7 @@ let campgrounds = [
 ];
 
 app.use(express.urlencoded({extended: true}));
+app.use(express.static("public"));
 app.set("view engine", "ejs");
 
 app.get("/", (req, res) => {

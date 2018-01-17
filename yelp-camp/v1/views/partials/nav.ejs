@@ -4,8 +4,24 @@ function isActive(currentPageName, targetPageName) {
 }
 %>
 
-<ul>
-  <li><a href="/" class="<%= (isActive(pageName, 'home'))?'active':'' %>">Home</a></li>
-  <li><a href="/campgrounds" class="<%= (isActive(pageName, 'campgrounds'))?'active':'' %>">View All Campgrounds</a></li>
-  <li><a href="/campgrounds/new" class="<%= (isActive(pageName, 'new'))?'active':'' %>">New Campgrounds</a></li>
-</ul>
+<nav class="navbar fixed-top navbar-expand-lg navbar-light">
+  <div class="container pl-3 pr-3">
+    <a class="navbar-brand" href="#">YelpCamp</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item<%= (isActive(pageName, 'home'))?' active':'' %>">
+          <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item<%= (isActive(pageName, 'campgrounds'))?' active':'' %>">
+          <a class="nav-link" href="/campgrounds">All Campgrounds</a>
+        </li>
+        <li class="nav-item<%= (isActive(pageName, 'new'))?' active':'' %>">
+          <a class="nav-link" href="/campgrounds/new">Add Campground</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
