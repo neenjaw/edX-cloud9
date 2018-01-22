@@ -1,20 +1,14 @@
 {
-  "name": "yelp-camp",
+  "name": "databases",
   "version": "1.0.0",
-  "description": "Campground Review",
+  "description": "",
   "main": "app.js",
   "scripts": {
     "test": "node app.js"
   },
-  "keywords": [
-    "node",
-    "express"
-  ],
   "author": "Tim Austin",
   "license": "ISC",
   "dependencies": {
-    "ejs": "^2.5.7",
-    "express": "^4.16.2",
     "mongoose": "^5.0.1"
   }
 }

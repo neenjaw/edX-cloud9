@@ -1,5 +1,6 @@
 const express = require("express"),
-      app = express();
+      app = express(),
+      mongoose = require('mongoose');
 
 let campgrounds = [
   {
