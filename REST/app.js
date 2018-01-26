@@ -12,6 +12,15 @@ mongoose.connect('mongodb://localhost/blog')
 // mongoose schema setup
 //
 
+const blogSchema = mongoose.Schema({
+  title: String,
+  image: String,
+  body: String,
+  created: {type: Date, default: Date.now}
+});
+
+const Blog = mongoose.model("Blog", blogSchema);
+
 //
 // express setup
 //
@@ -24,9 +33,75 @@ app.set("view engine", "ejs");
 // express middleware
 //
 
+// INDEX
 app.get("/", (req, res) => {
-  res.render("home");
-}); // end app.get /
+  res.redirect("/blogs");
+});
+
+// INDEX
+app.get("/blogs", (req, res) => {
+  Blog.find({}, (err, blogs) => {
+    if (err) {
+      console.log("An error occured.");
+    } else {
+      res.render("index", { blogs });
+    }
+  });
+});
+
+// NEW
+app.get("/blogs/new", (req, res) => {
+  res.send("Show new blog form");
+});
+
+// CREATE
+app.post("/blogs", (req, res) => {
+  res.send("POST blog");
+});
+
+// SHOW
+app.get("/blogs/:id", (req, res) => {
+  let id = req.params.id;
+
+  if (!id) {
+    res.redirect("/blogs");
+  } else {
+    res.send("Show a blog with id of: " + id);
+  }
+});
+
+// EDIT
+app.get("/blogs/:id/edit", (req, res) => {
+  let id = req.params.id;
+
+  if (!id) {
+    res.redirect("/blogs");
+  } else {
+    res.send("show edit for blog with id of: " + id);
+  }
+});
+
+// UPDATE
+app.put("/blogs/:id", (req, res) => {
+  let id = req.params.id;
+
+  if (!id) {
+    res.redirect("/blogs");
+  } else {
+    res.send("update blog with id of: " + id);
+  }
+});
+
+// DELETE
+app.delete("/blogs/:id", (req, res) => {
+  let id = req.params.id;
+
+  if (!id) {
+    res.redirect("/blogs");
+  } else {
+    res.send("Delete blog with id of: " + id);
+  }
+});
 
 //
 // express listen

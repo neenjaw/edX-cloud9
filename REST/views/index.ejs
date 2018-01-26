@@ -1,0 +1,31 @@
+<% include partials/head %>
+
+<div class="ui inverted vertical masthead center aligned segment">
+
+  <div class="ui container">
+    <div class="ui large secondary inverted pointing menu">
+      <a class="toc item">
+        <i class="sidebar icon"></i>
+      </a>
+      <a class="active item">Home</a>
+      <a class="item">New</a>
+    </div>
+  </div>
+
+  <div class="ui text container">
+    <h1 class="ui inverted header">
+      &lt;/&gt; Welcome
+    </h1>
+  </div>
+
+</div>
+
+<div class="ui vertical stripe segment">
+
+  <% blogs.forEach((blog) => { %>
+  <% include partials/smallblog %>
+  <% }) %>
+
+</div>
+
+<% include partials/foot %>
