@@ -33,7 +33,7 @@ app.set("view engine", "ejs");
 // express middleware
 //
 
-// INDEX
+// INDEX REDIRECT
 app.get("/", (req, res) => {
   res.redirect("/blogs");
 });
@@ -51,12 +51,20 @@ app.get("/blogs", (req, res) => {
 
 // NEW
 app.get("/blogs/new", (req, res) => {
-  res.send("Show new blog form");
+  res.render("new");
 });
 
 // CREATE
 app.post("/blogs", (req, res) => {
-  res.send("POST blog");
+  let blog = req.body.blog;
+
+  Blog.create(blog, (err, newBlog) => {
+    if (err) {
+      res.render("new", { blog, error: true, error_msgs: [err] })
+    } else {
+      res.redirect("/blogs");
+    }
+  });
 });
 
 // SHOW

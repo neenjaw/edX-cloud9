@@ -1,0 +1,17 @@
+.code.icon {
+  font-size: 30px;
+  font-weight: 700;
+}
+
+.ui.main.container {
+  margin-top: 7em;
+}
+
+.ui.container img {
+  width: 100%;
+}
+
+.ui.footer.segment {
+  margin: 5em 0em 0em;
+  padding: 5em 0em;
+}
