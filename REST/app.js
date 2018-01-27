@@ -74,7 +74,13 @@ app.get("/blogs/:id", (req, res) => {
   if (!id) {
     res.redirect("/blogs");
   } else {
-    res.send("Show a blog with id of: " + id);
+    Blog.findOne({ _id: id }, (err, foundBlog) => {
+      if (err) {
+        res.redirect("/blogs");
+      } else {
+        res.render("show", { blog: foundBlog });
+      }
+    });
   }
 });
 
