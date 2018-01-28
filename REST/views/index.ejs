@@ -1,15 +1,21 @@
 <% include partials/head %>
 
-<div class="ui main container">
+<div class="ui main text container">
+  <div class="ui huge header">
+    RESTful Blog App
+  </div>
+  <div class="ui top attached segment">
 
-</div>
 
-<div class="ui very relaxed items container segment">
+    <div class="ui divided items">
 
-  <% blogs.forEach((blog) => { %>
-  <% include partials/smallblog %>
-  <% }) %>
+      <% blogs.forEach((blog) => { %>
+      <% include partials/smallblog %>
+      <% }) %>
 
+    </div>
+
+  </div>
 </div>
 
 <% include partials/pre-script-footer %>

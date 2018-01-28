@@ -1,6 +1,7 @@
 const express = require("express"),
       app = express(),
       methodOverride = require('method-override'),
+      expressSanitizer = require('express-sanitizer'),
       mongoose = require("mongoose");
 
 //
@@ -29,8 +30,13 @@ const Blog = mongoose.model("Blog", blogSchema);
 
 // override with POST having ?_method=DELETE
 app.use(methodOverride('_method'))
+
 // options for express' body parser
 app.use(express.urlencoded({extended: true}));
+
+// sanitize the incoming body
+app.use(expressSanitizer());
+
 //declare the static deliverables route
 app.use(express.static('public'));
 
@@ -64,6 +70,8 @@ app.get("/blogs/new", (req, res) => {
 // CREATE
 app.post("/blogs", (req, res) => {
   let blog = req.body.blog;
+
+  blog.body = req.sanitize(blog.body)
 
   Blog.create(blog, (err, newBlog) => {
     if (err) {
@@ -115,6 +123,8 @@ app.put("/blogs/:id", (req, res) => {
 
   blog.updated = Date.now();
 
+  blog.body = req.sanitize(blog.body)
+
   if (!id) {
     res.redirect("/blogs");
   } else {
@@ -136,7 +146,15 @@ app.delete("/blogs/:id", (req, res) => {
   if (!id) {
     res.redirect("/blogs");
   } else {
-    res.send("Delete blog with id of: " + id);
+    Blog.where({ _id: id }).remove((err) => {
+      if (err) {
+        console.log(err);
+        res.redirect("/blogs");
+      } else {
+        console.log(id + " deleted.");
+        res.redirect("/blogs");
+      }
+    });
   }
 });
 

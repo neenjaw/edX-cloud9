@@ -4,12 +4,14 @@
   </div>
   <div class="content">
     <a class="ui header" href="/blogs/<%= blog._id %>"><%= blog.title %></a>
-    <div class="description">
+    <div class="meta">
       <span><%= blog.created.toDateString() %><% if (blog.updated) { %> -- Updated: <%= blog.updated.toDateString() %><% } %></span>
-      <p><%= blog.body.replace(/^(([^\s]+\s+){20})([\s\S]*)$/, "$1").trim() + " ... " %></p>
     </div>
-    <div class="">
-      <a class="ui left floated right labeled icon button" href="/blogs/<%= blog._id %>"><i class="right arrow icon"></i> Read More</a>
+    <div class="description">
+      <p><%- blog.body.replace(/^(([^\s]+\s+){20})([\s\S]*)$/, "$1").trim() + " ... " %></p>
+    </div>
+    <div class="extra">
+      <a class="ui right floated right labeled icon button" href="/blogs/<%= blog._id %>"><i class="right arrow icon"></i> Read More</a>
     </div>
   </div>
 </div>

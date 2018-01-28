@@ -27,11 +27,10 @@
 <div class="ui mini basic delete modal">
   <div class="ui icon header">
     <i class="archive icon"></i>
-    Delete message?
+    Delete post?
   </div>
   <div class="actions">
     <form class="" action="/blogs/<%= blog._id %>?_method=delete" method="post">
-      <input type="hidden" name="id" value="<%= blog._id %>">
       <a id="cancel" class="ui basic cancel inverted button">No</a>
       <button type="submit" class="ui red ok inverted button"><i class="remove icon"></i> Yes </button>
     </form>
