@@ -1,5 +1,6 @@
 const express = require("express"),
       app = express(),
+      methodOverride = require('method-override'),
       mongoose = require("mongoose");
 
 //
@@ -16,7 +17,8 @@ const blogSchema = mongoose.Schema({
   title: String,
   image: String,
   body: String,
-  created: {type: Date, default: Date.now}
+  created: {type: Date, default: Date.now},
+  updated: Date
 });
 
 const Blog = mongoose.model("Blog", blogSchema);
@@ -25,8 +27,13 @@ const Blog = mongoose.model("Blog", blogSchema);
 // express setup
 //
 
+// override with POST having ?_method=DELETE
+app.use(methodOverride('_method'))
+// options for express' body parser
 app.use(express.urlencoded({extended: true}));
+//declare the static deliverables route
 app.use(express.static('public'));
+
 app.set("view engine", "ejs");
 
 //
@@ -91,18 +98,34 @@ app.get("/blogs/:id/edit", (req, res) => {
   if (!id) {
     res.redirect("/blogs");
   } else {
-    res.send("show edit for blog with id of: " + id);
+    Blog.findOne({ _id: id }, (err, foundBlog) => {
+      if (err) {
+        res.redirect("/blogs");
+      } else {
+        res.render("edit", { blog: foundBlog });
+      }
+    });
   }
 });
 
 // UPDATE
 app.put("/blogs/:id", (req, res) => {
-  let id = req.params.id;
+  let id = req.params.id,
+      blog = req.body.blog;
+
+  blog.updated = Date.now();
 
   if (!id) {
     res.redirect("/blogs");
   } else {
-    res.send("update blog with id of: " + id);
+    Blog.where({ _id: id }).update({ $set: blog }, (err, updatedBlog) => {
+      if (err) {
+        console.log(err);
+        res.redirect(`/blogs/${id}/edit`);
+      } else {
+        res.redirect(`/blogs/${id}`);
+      }
+    })
   }
 });
 

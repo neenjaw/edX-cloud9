@@ -1,0 +1,58 @@
+<% include partials/head %>
+
+<div class="ui main text container segment">
+
+  <div class="ui huge header">Edit Post: <%= blog.title %></div>
+
+  <form class="ui form" action="/blogs/<%= blog._id %>?_method=PUT" method="post">
+    <div class="field">
+      <label>Title</label>
+      <input type="text" name="blog[title]" placeholder="title" value="<%= blog.title %>">
+    </div>
+    <div class="field">
+      <label>Image URL</label>
+      <input type="text" name="blog[image]" placeholder="image URL" value="<%= blog.image %>">
+    </div>
+    <div class="field">
+      <label>Blog Content</label>
+      <textarea name="blog[body]" placeholder="blog post goes here"><%= blog.body %></textarea>
+    </div>
+    <button class="ui green button" type="submit">Update</button>
+    <a class="ui orange button" href="/blogs/<%= blog._id %>">Cancel</a>
+    <a id="delete" class="ui right floated red button">Delete</a>
+  </form>
+
+</div>
+
+<div class="ui mini basic delete modal">
+  <div class="ui icon header">
+    <i class="archive icon"></i>
+    Delete message?
+  </div>
+  <div class="actions">
+    <form class="" action="/blogs/<%= blog._id %>?_method=delete" method="post">
+      <input type="hidden" name="id" value="<%= blog._id %>">
+      <a id="cancel" class="ui basic cancel inverted button">No</a>
+      <button type="submit" class="ui red ok inverted button"><i class="remove icon"></i> Yes </button>
+    </form>
+  </div>
+</div>
+
+<% include partials/pre-script-footer %>
+<% include partials/scripts %>
+
+<script>
+// click listener to show the delete modal
+$("#delete").click((event) => {
+  $('.basic.delete.modal')
+    .modal('show');
+});
+
+// click listener to hide the delete modal
+$("#cancel").click((event) => {
+  $('.basic.delete.modal')
+    .modal('hide');
+});
+</script>
+
+<% include partials/post-script-footer %>

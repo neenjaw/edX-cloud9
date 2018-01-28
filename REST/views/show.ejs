@@ -1,11 +1,22 @@
 <% include partials/head %>
 
-<div class="ui main text container segment">
-  <h3 class="ui huge header"><%= blog.title %></h3>
-  <img src="<%= blog.image %>" alt="">
-  <span><%= blog.created %></span>
-  <p><%= blog.body %></p>
-  <a class="ui left labeled icon button" href="/blogs"><i class="left arrow icon"></i> Back</a>
+<div class="ui main text container">
+  <h2 class="ui huge header"><%= blog.title %></h3>
+  <div class="ui top segment">
+    <div class="item">
+      <img class="ui centered rounded image" src="<%= blog.image %>" alt="">
+      <div class="content">
+        <span><%= blog.created.toDateString() %></span>
+      </div>
+      <div class="description">
+        <p><%- blog.body %></p>
+      </div>
+    </div>
+  </div>
+  <a class="ui left floated left labeled icon button" href="/blogs"><i class="left arrow icon"></i> Back</a>
+  <a class="ui right floated left labeled icon button" href="/blogs/<%= blog._id %>/edit"><i class="edit icon"></i> Edit</a>
 </div>
 
-<% include partials/foot %>
+<% include partials/pre-script-footer %>
+<% include partials/scripts %>
+<% include partials/post-script-footer %>
