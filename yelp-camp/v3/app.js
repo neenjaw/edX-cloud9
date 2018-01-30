@@ -3,16 +3,16 @@ const express = require("express"),
       mongoose = require('mongoose');
 
 //
-// mongoose setup
-//
-
-mongoose.connect('mongodb://localhost/yelpcamp');
-
-//
 // mongoose schema setup
 //
 
 const Campground = require("./models/campground");
+
+//
+// mongoose setup
+//
+
+mongoose.connect('mongodb://localhost/yelpcamp');
 
 //
 // express setup
