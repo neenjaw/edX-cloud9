@@ -1,6 +1,7 @@
 const express = require("express"),
       app = express(),
-      mongoose = require('mongoose');
+      mongoose = require('mongoose'),
+      seed = require('./seed');
 
 //
 // mongoose schema setup
@@ -13,6 +14,8 @@ const Campground = require("./models/campground");
 //
 
 mongoose.connect('mongodb://localhost/yelpcamp');
+
+seed.seedDB();
 
 //
 // express setup
