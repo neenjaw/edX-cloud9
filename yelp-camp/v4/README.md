@@ -23,3 +23,4 @@ Each Comment has:
 | NEW      | /campgrounds/new | GET | Display form to make a new campground |
 | CREATE   | /campgrounds | POST | Add a new campground to the DB |
 | SHOW     | /campgrounds/:id | GET | Shows one campground in detail |
+|          |     |     |     |
