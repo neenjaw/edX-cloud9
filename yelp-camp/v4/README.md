@@ -23,6 +23,10 @@ Each Comment has:
 | NEW      | /campgrounds/new | GET | Display form to make a new campground |
 | CREATE   | /campgrounds | POST | Add a new campground to the DB |
 | SHOW     | /campgrounds/:id | GET | Shows one campground in detail |
+<<<<<<< HEAD
 |     |     |     |     |
 | NEW      | /campgrounds/:id/comments/new | GET | Display form to add a new comments |
 | CREATE   | /campgrounds/:id/comments | POST | Adds a new comment to the campground in the DB |
+=======
+|          |     |     |     |
+>>>>>>> 21abe4c7120082b32d549689b452949b1266f026
