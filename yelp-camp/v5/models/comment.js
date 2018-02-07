@@ -7,7 +7,7 @@ module.exports = (function() {
     author: String,
   });
 
-  const Comment = mongoose.model("Comment", commentSchema);
+  const Comment = mongoose.model('Comment', commentSchema);
 
   return Comment;
 

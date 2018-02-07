@@ -9,12 +9,12 @@ module.exports = (function() {
     comments: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Comment"
+        ref: 'Comment'
       }
     ]
   });
 
-  const Campground = mongoose.model("Campground", campgroundSchema);
+  const Campground = mongoose.model('Campground', campgroundSchema);
 
   return Campground;
 
