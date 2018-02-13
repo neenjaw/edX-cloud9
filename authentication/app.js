@@ -20,7 +20,8 @@ const User = require('./models/user');
 const app = express();
 
 app.set('view engine', 'ejs');
-
+app.use(express.urlencoded({extended: true}));
+app.use(express.static(__dirname + '/public'));
 app.use(require('express-session')({
   secret: 'This is the app secret',
   resave: false,
@@ -30,11 +31,11 @@ app.use(require('express-session')({
 app.use(passport.initialize());
 app.use(passport.session());
 
+passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-app.use(express.urlencoded({extended: true}));
-app.use(express.static(__dirname + '/public'));
+
 
 //
 // express middleware
@@ -42,9 +43,9 @@ app.use(express.static(__dirname + '/public'));
 
 app.get('/', (req, res) => {
   res.render('home');
-}); // end app.get /
+});
 
-app.get('/secret', (req, res) => {
+app.get('/secret', isLoggedIn, (req, res) => {
   res.render('secret');
 });
 
@@ -57,18 +58,46 @@ app.get('/register', (req, res) => {
 });
 
 app.post('/register', (req, res) => {
-  let user = req.body.user;
-
-  User.register(new User({username: user.username}), user.password, (err) => {
+  let username = req.body.username;
+  let password = req.body.password;
+  
+  User.register(new User({ username }), password, (err, user) => {
     if (err) {
       console.log(err);
-      return res.render('/register');
+      
+      return res.render('register');
     }
 
     passport.authenticate('local')(req, res, () => {
       res.redirect('/secret');
     });
   });
+});
+
+function isLoggedIn(req, res, next) {
+  if (req.isAuthenticated()) {
+    return next();
+  }
+
+  res.redirect('/login');
+}
+
+// LOGIN
+// render login form
+app.get('/login', (req, res) => {
+  res.render('login');  
+});
+
+app.post('/login', passport.authenticate('local', {
+  successRedirect: '/secret',
+  failureRedirect: '/login'
+}), (req, res) => {
+});
+
+// LOGOUT
+app.get('/logout', function(req, res){
+  req.logout();
+  res.redirect('/');
 });
 
 //
