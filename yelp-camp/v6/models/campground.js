@@ -11,7 +11,9 @@ module.exports = (function() {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Comment'
       }
-    ]
+    ],
+    created: {type: Date, default: Date.now},
+    updated: Date
   });
 
   const Campground = mongoose.model('Campground', campgroundSchema);

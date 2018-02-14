@@ -6,7 +6,9 @@ module.exports = (function () {
   const userSchema = mongoose.Schema({
     username: String,
     password: String,
-    displayName: String
+    displayName: String,
+    created: {type: Date, default: Date.now},
+    updated: Date
   });
 
   userSchema.plugin(passportLocalMongoose);
@@ -14,4 +16,4 @@ module.exports = (function () {
   const User = mongoose.model('User', userSchema);
 
   return User;
-});
+}());

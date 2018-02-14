@@ -20,6 +20,7 @@
           <h5 class="float-right">$9.00/night</h5>
           <h4 class="card-title"><a href="#"><%= campground.name %></a></h4>
           <p class="card-text"><%= campground.description %></p>
+          <p class="card-text"><small class="text-muted">Posted <%= campground.created.getMonth() + 1 %>/<%= campground.created.getDate() %>/<%= campground.created.getFullYear() %></small></p>
         </div>
         <div class="card-footer">
           <div class="text-right">
@@ -32,7 +33,7 @@
               <h5>
                 <span>★★★★☆</span>
                 <strong><%= comment.author %></strong>
-                <small class="float-right text-muted">Last updated 3 mins ago</small>
+                <small class="float-right text-muted"><% if (!campground.updated) { %>Posted <%= campground.created.getMonth() + 1 %>/<%= campground.created.getDate() %>/<%= campground.created.getFullYear() %><% } else { %>Last updated <%= campground.updated.getMonth() + 1 %>/<%= campground.updated.getDate() %>/<%= campground.updated.getFullYear() %><% } %></small>
               </h5>
               <p>
                 <%= comment.text %>

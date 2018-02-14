@@ -22,7 +22,7 @@ function printLi(text, href, linkPageName, currentPageName) {
 
 <nav class="navbar navbar-expand-lg navbar-light fixed-top">
   <div class="container pl-3 pr-3">
-    <a class="navbar-brand" href="#">YelpCamp</a>
+    <a class="navbar-brand" href="/">YelpCamp</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -34,9 +34,13 @@ function printLi(text, href, linkPageName, currentPageName) {
         <%- printLi('Add Campground', '/campgrounds/new', 'campgrounds/new', pageName) %>
       </ul>
       <ul class="navbar-nav">
+        <% if (!user) { %>
         <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
-        <li class="nav-item"><a class="nav-link" href="/signup">Sign up</a></li>
-        <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
+        <li class="nav-item"><a class="nav-link" href="/register">Sign up</a></li>
+        <% } else { %>
+        <li class="nav-item"><a class="nav-link disabled" href="#">Signed in as <%= user.displayName %></a></li>
+        <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
+        <% } %>
       </ul>
     </div>
   </div>
