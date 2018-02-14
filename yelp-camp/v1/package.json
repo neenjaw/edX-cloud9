@@ -1,6 +1,6 @@
 {
   "name": "yelp-camp",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Campground Review",
   "main": "app.js",
   "scripts": {
