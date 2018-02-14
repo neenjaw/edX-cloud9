@@ -1,39 +1,66 @@
-const express = require('express'),
-  app = express(),
-  mongoose = require('mongoose'),
-  seed = require('./seed');
+// ============================
+// Node Requires
+// ============================
 
-//
-// mongoose schema setup
-//
+const express  = require('express');
 
-const Campground = require('./models/campground');
-const Comment = require('./models/comment');
+const mongoose = require('mongoose');
+const seed     = require('./seed');
 
-//
+const passport              = require('passport');
+const LocalStrategy         = require('passport-local');
+const passportLocalMongoose = require('passport-local-mongoose');
+
+// ============================
 // mongoose setup
-//
+// ============================
 
 mongoose.connect('mongodb://localhost/yelpcamp');
 
+// ============================
+// mongoose schema setup
+// ============================
+
+const User = require('.models/user');
+const Campground = require('./models/campground');
+const Comment = require('./models/comment');
+
 seed.seedDB();
 
-//
+// ============================
 // express setup
-//
+// ============================
 
-app.use(express.urlencoded({extended: true}));
-app.use(express.static(__dirname + '/public'));
+const app = express();
+
 app.set('view engine', 'ejs');
+app.use(express.static(__dirname + '/public'));
+app.use(express.urlencoded({extended: true}));
+app.use(require('express-session')({
+  secret: 'n33BjOLuNncxtuYXpbux',
+  resave: false,
+  saveUninitialized: false,
+}));
 
-//
-// express middleware
-//
+app.use(passport.initialize());
+app.use(passport.session());
 
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+// ============================
+// express routes
+// ============================
+
+//LANDING
 app.get('/', (req, res) => {
   res.render('landing', {pageName:'landing'});
-}); // end app.get /
+});
 
+// ============================
+// CAMPGROUND ROUTES
+// ============================
 
 //INDEX - show all campgrounds
 app.get('/campgrounds', (req, res) => {
@@ -123,7 +150,7 @@ app.get('/campgrounds/:id', (req, res) => {
 });
 
 // ============================
-// COMMENTS ROUTES
+// COMMENT ROUTES
 // ============================
 
 app.get('/campgrounds/:id/comments/new', (req, res) => {
@@ -174,6 +201,10 @@ app.post('/campgrounds/:id/comments', (req, res) => {
     }
   });
 });
+
+// ============================
+// Server Start / Listen
+// ============================
 
 app.listen(3000, 'localhost', () => {
   console.log('Yelp-Camp Server starting on localhost:3000');
