@@ -29,7 +29,15 @@
               <% } %>
                 by <%= campground.author.name %>
             </small>
-            <a class="btn btn-warning float-right" href="/campgrounds/<%= campground.id %>/edit">Edit</a>
+            <div>
+              <% if (user && campground.author.id.equals(user.id)) { %>
+                <form class="pl-1 float-right" action="/campgrounds/<%= campground.id %>?_method=DELETE" method="POST">
+                  <button class="btn btn-sm btn-danger">Delete</button>
+                </form>
+                
+                <a class="btn btn-sm btn-warning float-right" href="/campgrounds/<%= campground.id %>/edit">Edit</a>
+              <% } %>
+            </div>
           </p>
         </div>
         <div class="card-footer">

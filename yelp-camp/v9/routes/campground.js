@@ -135,30 +135,20 @@ router.get('/:id', (req, res) => {
 });
 
 // EDIT
-router.get('/:id/edit', (req, res) => {
-    const id = req.params.id;
-
-    Campground
-        .findById(id)
-        .exec((err, campground) => {
-            if (err) {
-                //TODO: eventually replace with a redirect to the form with error
-                res.redirect('/campgrounds');
-            } else {
-                campground = {
-                    id: campground._id,
-                    name: campground.name,
-                    image: campground.image,
-                    description: campground.description
-                };
-
-                res.render('campgrounds/edit', {pageName: 'campgrounds/show', campground});
-            }
-        });
+router.get('/:id/edit', isThisCampgroundOwner, (req, res) => {
+    //send the campground to the res.render via locals
+    res.locals.campground = {
+        id: req.campground._id,
+        name: req.campground.name,
+        image: req.campground.image,
+        description: req.campground.description
+    };
+    
+    res.render('campgrounds/edit', {pageName: 'campgrounds/show'});
 });
 
 // UPDATE
-router.put('/:id', (req, res) => {
+router.put('/:id', isThisCampgroundOwner, (req, res) => {
     const id = req.params.id;
     const campground = req.body.campground;
 
@@ -183,7 +173,7 @@ router.put('/:id', (req, res) => {
 });
 
 // DELETE
-router.delete('/:id', (req, res) => {
+router.delete('/:id', isThisCampgroundOwner, (req, res) => {
     const id = req.params.id;
     
     if (!id) {
@@ -208,6 +198,35 @@ function isLoggedIn(req, res, next) {
         return next();
     }
     res.redirect('/login');
+}
+
+function isThisCampgroundOwner(req, res, next) {
+    // is user logged in?
+    if (!req.isAuthenticated()) {
+        //if not, redirect
+        res.redirect('back');
+    
+    } else {
+        //continue with edit
+        const id = req.params.id;
+    
+        Campground
+            .findById(id)
+            .exec((err, campground) => {
+                if (err) {
+                    //TODO: eventually replace with a redirect to the form with error
+                    res.redirect('/campgrounds');
+                } else {
+                    //does the user own the campground?
+                    if (!campground.author.equals(req.user._id)) {
+                        res.redirect('back');
+                    } else {
+                        req.campground = campground;
+                        next();
+                    }
+                }
+            });
+    }
 }
 
 module.exports = router;

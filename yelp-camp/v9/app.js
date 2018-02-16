@@ -83,9 +83,18 @@ passport.deserializeUser(User.deserializeUser());
 // Misc Setup 
 // ============================
 
-// Include the user data in each request
+// Include the user data in each response for the render template
 app.use((req, res, next) => {
-    res.locals.user = req.user;
+    if (typeof req.user === 'undefined') {
+        res.locals.user = undefined;
+    } else {
+        res.locals.user = {
+            id: req.user._id,
+            username: req.user.username,
+            name: req.user.displayName
+        };
+    }
+
     next();
 });
 
