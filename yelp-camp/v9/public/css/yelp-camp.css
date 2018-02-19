@@ -31,9 +31,13 @@ nav + div {
 }
 
 .campground {
-  margin: 15px;
+  --campground-margin: 15px;
 
-  flex: 1 1 25%;  
+  /* margin: 15px; */
+  margin: var(--campground-margin);
+
+  /* flex: 1 1 25%;   */
+  flex: 0 1 calc(33.33% - 2 * var(--campground-margin));
 }
 
 .campground .card-body {
