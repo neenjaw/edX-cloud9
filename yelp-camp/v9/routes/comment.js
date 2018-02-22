@@ -69,6 +69,7 @@ router.post('/', isLoggedIn, (req, res) => {
 
                     //save campground
                     campground.save();
+                    
                     res.redirect(`/campgrounds/${campground._id}`);
                 }
             });

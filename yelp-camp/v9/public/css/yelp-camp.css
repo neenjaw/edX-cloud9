@@ -33,10 +33,8 @@ nav + div {
 .campground {
   --campground-margin: 15px;
 
-  /* margin: 15px; */
   margin: var(--campground-margin);
 
-  /* flex: 1 1 25%;   */
   flex: 0 1 calc(33.33% - 2 * var(--campground-margin));
 }
 

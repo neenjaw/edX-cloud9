@@ -10,6 +10,7 @@ const router  = express.Router();
 // ============================
 
 const Campground = require('../models/campground');
+const Comment = require('../models/comment');
 
 // ============================
 // Campground Routes
@@ -180,12 +181,25 @@ router.delete('/:id', isThisCampgroundOwner, (req, res) => {
         res.redirect('/campgrounds');
     } else {
         Campground
-            .where({ _id: id })
-            .remove(err => {
+            .findByIdAndRemove(id, (err, campground) => {
                 if (err) {
                     console.log(err);
                     res.redirect(`/campgrounds/${id}`);
-                } else {
+                } else {         
+
+                    campground.comments.forEach(commentId => {
+
+                        Comment
+                            .findByIdAndRemove(commentId, (err) => {
+                                if (err) {
+                                    console.log(err);
+                                } else {
+                                    console.log('Comment deleted');                                
+                                }
+                            });             
+                                       
+                    });
+
                     res.redirect('/campgrounds');
                 }
             });
