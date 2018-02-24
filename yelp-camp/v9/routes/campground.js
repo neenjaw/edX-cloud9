@@ -96,6 +96,11 @@ router.get('/:id', (req, res) => {
                 res.flash('danger', `An error was encountered: ${err}`);
                 res.redirect('back');
             } else {
+                if (!campground) {
+                    res.flash('danger', 'This campground does not exist');
+                    return res.redirect('back');
+                }
+
                 //Send a sanitized copy of the data to render
                 campground = {
                     id: campground._id,

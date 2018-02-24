@@ -48,6 +48,11 @@ middlewareObj.isThisCampgroundOwner = function (req, res, next) {
                     res.flash('danger', 'There has been an error!');                        
                     res.redirect('/campgrounds');
                 } else {
+                    if (!campground) {
+                        res.flash('danger', 'This campground does not exist');
+                        return res.redirect('/campgrounds');
+                    }
+
                     //does the user own the campground?
                     if (!campground.author.equals(req.user._id)) {
                         res.flash('danger', 'You are not authorized to edit this page!');                        
@@ -82,6 +87,12 @@ middlewareObj.isThisCommentOwner = function (req, res, next) {
                     res.flash('danger', 'There has been an error!');                        
                     res.redirect('back');
                 } else {
+
+                    if (!comment) {
+                        res.flash('danger', 'This comment does not exist');
+                        return res.redirect('/campgrounds');
+                    }
+
                     //does the user own the comment?
                     if (!comment.author.equals(req.user._id)) {
                         res.flash('danger', 'You are not authorized to edit this comment!');                        

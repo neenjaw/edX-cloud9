@@ -53,6 +53,12 @@ router.post('/', middleware.isLoggedIn, (req, res) => {
             res.flash('danger', `An error was encountered: ${err}`);
             res.redirect('/campgrounds');
         } else {
+
+            if (!campground) {
+                res.flash('danger', 'Cannot add a comment to a campground that does not exist');
+                return res.redirect('back');
+            }
+
             Comment.create(comment, (err, comment) => {
                 if (err) {
                     // console.log(err);

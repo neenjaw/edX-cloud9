@@ -6,7 +6,7 @@ module.exports = (function () {
     const userSchema = mongoose.Schema({
         username: String,
         password: String,
-        displayName: String,
+        displayName: { type: String, unique: true, required: true },
         created: {
             type: Date, default: Date.now
         },
