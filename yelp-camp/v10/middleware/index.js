@@ -78,10 +78,10 @@ middlewareObj.isThisCommentOwner = function (req, res, next) {
     
     } else {
         //continue with edit
-        const id = req.params.commentId;
+        const commentId = req.params.commentId;
     
         Comment
-            .findById(id)
+            .findById(commentId)
             .exec((err, comment) => {
                 if (err) {
                     res.flash('danger', 'There has been an error!');                        

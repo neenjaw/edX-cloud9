@@ -87,16 +87,24 @@ router.post('/', middleware.isLoggedIn, (req, res) => {
 
 //EDIT
 router.get('/:commentId/edit', middleware.isThisCommentOwner, (req, res) => {
-    res.render('comments/edit', {
-        pageName: 'campgrounds/comments/new', 
-        campground: {
-            id: req.params.id
-        },
-        comment: {
-            id: req.comment._id,
-            text: req.comment.text
-        }
-    });
+    Campground
+        .findById(req.params.id, (err, campground) => {
+            if (err || !campground) {
+                res.flash('danger', 'Can\'t edit the comment on a non-existant campground');
+                return res.redirect('/campgrounds');
+            } else {
+                res.render('comments/edit', {
+                    pageName: 'campgrounds/comments/new',
+                    campground: {
+                        id: req.params.id
+                    },
+                    comment: {
+                        id: req.comment._id,
+                        text: req.comment.text
+                    }
+                });
+            }
+        });
 });
 
 //UPDATE
