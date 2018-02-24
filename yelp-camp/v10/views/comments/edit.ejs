@@ -1,0 +1,29 @@
+<% include ../partials/header %>
+
+<% include ../partials/nav %>
+
+<div class="container text-center">
+  
+  <% include ../partials/flash %>
+
+  <header>
+    <h1>Edit your comment:</h1>
+  </header>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="div-form">
+      <form class="" action="/campgrounds/<%= campground.id %>/comments/<%= comment.id %>?_method=PUT" method="post">
+        <div class="form-group">
+          <label class="sr-only" for="text">Comment:</label>
+          <textarea class="form-control" name="comment[text]" id="text" rows="3" placeholder="Your comment..."><%= comment.text %></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block mb-2">Submit</button>
+      </form>
+      <a href="/campgrounds/<%= campground.id %>">Go Back</a>
+    </div>
+  </div>
+</div>
+
+<% include ../partials/footer %>

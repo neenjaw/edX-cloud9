@@ -1,0 +1,49 @@
+<%
+function isActive(currentPageName, targetPageName) {
+  return currentPageName === targetPageName;
+}
+
+function printLink(text, href, linkPageName, currentPageName, active) {
+  active = active || isActive(pageName, linkPageName);
+  let span = active ? ' <span class="sr-only">(current)</span>' : '';
+  let link = active ? '#' : href;
+
+  return `<a class="nav-link" href="${link}">${text}${span}</a>`;
+}
+
+function printLi(text, href, linkPageName, currentPageName) {
+  let active = isActive(pageName, linkPageName);
+  let activeClass = active ? ' active' : '';
+  let link = printLink(text, href, linkPageName, currentPageName, active);
+
+  return `<li class="nav-item${activeClass}">${link}</li>`;
+}
+%>
+
+<nav class="navbar navbar-expand-lg navbar-light fixed-top">
+  <div class="container pl-3 pr-3">
+    <a class="navbar-brand" href="/">YelpCamp</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" 
+            data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" 
+            aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <%- printLi('Home', '/', 'landing', pageName) %>
+        <%- printLi('Campgrounds', '/campgrounds', 'campgrounds/index', pageName) %>
+        <%- printLi('Add Campground', '/campgrounds/new', 'campgrounds/new', pageName) %>
+      </ul>
+      <ul class="navbar-nav">
+        <% if (!user) { %>
+        <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
+        <li class="nav-item"><a class="nav-link" href="/register">Sign up</a></li>
+        <% } else { %>
+        <li class="nav-item"><a class="nav-link disabled" href="#">Signed in as <%= user.name %></a></li>
+        <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
+        <% } %>
+      </ul>
+    </div>
+  </div>
+</nav>
