@@ -11,9 +11,7 @@ if (flash) {
 
                 <% for (let i = 0, arr = flash[type]; i < arr.length; i++ ) { %>
                     <p class="m-0 p-0"><%= arr[i] %></p>
-                    <% if ( i < arr.length - 1 ) { %>
-                        <hr>
-                    <% } %>
+                    <% if ( i < arr.length - 1 ) { %><hr><% } %>
                 <% } %>
             </div>
         <% }
