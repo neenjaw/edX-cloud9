@@ -5,6 +5,7 @@
 const express  = require('express');
 const mongoose = require('mongoose');
 
+const flash            = require('express-flash-2');
 const methodOverride   = require('method-override');
 const expressSanitizer = require('express-sanitizer');
 
@@ -50,7 +51,7 @@ app.set('view engine', 'ejs');
 // Body Parsing
 app.use(express.urlencoded({extended: true}));
 
-// sanitize the incoming body
+// Sanitize the incoming body
 app.use(expressSanitizer());
 
 // Static File Serve Dir
@@ -66,6 +67,8 @@ app.use(require('express-session')({
     saveUninitialized: false,
 }));
 
+app.use(flash());
+
 // ============================
 // Passport Setup 
 // ============================
@@ -75,7 +78,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Config Passport
-passport.use(new LocalStrategy(User.authenticate()));
+// passport.use(new LocalStrategy(User.authenticate()));
+passport.use(User.createStrategy());
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 

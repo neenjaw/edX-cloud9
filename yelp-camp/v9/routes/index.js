@@ -28,6 +28,8 @@ router.get('/', (req, res) => {
 
 // Show Register Form
 router.get('/register', (req, res) => {
+    // console.log(req.headers.referer);
+    
     res.render('auth/register', {pageName: 'auth/register'});
 });
 
@@ -41,7 +43,7 @@ router.post('/register', (req, res) => {
     const newUser = new User({username, displayName});
     User.register(newUser, password, (err, user) => {
         if (err) {
-            console.log(err);
+            // console.log(err);
             return res.render('register');
         }
 
@@ -52,29 +54,27 @@ router.post('/register', (req, res) => {
 });
 
 // Show Login
-router.get('/login', (req, res) => {
+router.get('/login', (req, res) => {    
     res.render('auth/login', {pageName: 'auth/login'});
 });
 
 // Handle Login Logic
 router.post('/login', passport.authenticate('local', {
-    successRedirect: '/campgrounds',
     failureRedirect: '/login'
 }), (req, res) => {
+    const path = req.session.returnToPath || '/campgrounds';
+    delete req.session.returnToPath;
+
+    res.flash('success', 'Successfully logged in!');
+
+    res.redirect(path);
 });
 
 // Handle Logout Logic
 router.get('/logout', (req, res) => {
     req.logout();
+    res.flash('secondary', 'Successfully logged out.');
     res.redirect('/campgrounds');
 });
-
-// isLoggedIn Middleware
-function isLoggedIn(req, res, next) {
-    if ( req.isAuthenticated() ) {
-        return next();
-    }
-    res.redirect('/login');
-}
 
 module.exports = router;
