@@ -4,10 +4,12 @@ if (flash) {
 
     alertTypes.forEach(type => {
         if (type in flash) { %>
-            <div class="alert alert-<%= type %> alert dismissible fade show" role="alert">
-                <button type="button" class="close m-0 p-0" data-dismiss="alert" aria-label="Close">
+            <div class="alert alert-<%= type %> alert-dismissible fade show" role="alert">
+                <!--
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
-                </button>    
+                </button>
+                -->
 
                 <% for (let i = 0, arr = flash[type]; i < arr.length; i++ ) { %>
                     <p class="m-0 p-0"><%= arr[i] %></p>

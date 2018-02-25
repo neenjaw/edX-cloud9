@@ -1,3 +1,5 @@
+<% locals.update = locals.update || null; %>
+
 <% include ../partials/header %>
 
 <% include ../partials/nav %>
@@ -19,7 +21,7 @@
             </div>
             <div class="form-group">
                 <label for="name">Name - <a class="toggle-name" href="javascript:void(0);">change</a></label>
-                <input type="text" class="form-control" id="name" name="user[name]" value="<%= user.name %>" 
+                <input type="text" class="form-control" id="name" name="user[name]" value="<%= (update) ? update.name : user.name %>" 
                     placeholder="Username" pattern="[a-zA-Z0-9\-_]{3,20}" data-name="<%= user.name %>" readonly>
             </div>
             <div id="passwordGroup">
@@ -34,6 +36,7 @@
 </div>
 
 <script>
+
 const passwordDefault = `<div class="form-group">
                             <label for="password">Password - <a class="toggle-password" href="javascript:void(0);">change password</a></label>
                             <input type="text" class="form-control" id="password" name="user[password]" value="<%= user.password %>" placeholder="Password" readonly>
@@ -42,17 +45,16 @@ const passwordDefault = `<div class="form-group">
 const passwordSubForm = `<div class="grouping">
     <div class="form-group">
         <label for="oldPassword">Old Password - <a class="toggle-password" href="javascript:void(0);">cancel password change</a></label>
-        <input type="password" class="form-control" id="oldPassword" name="user[oldPassword]" value="<%= user.oldPassword %>" 
-            placeholder="Password" required>
+        <input type="password" class="form-control" id="oldPassword" name="user[oldPassword]" value="" placeholder="Password" required>
     </div>
     <div class="form-group">
         <label for="newPassword">New Password</label>
-        <input type="text" class="form-control" id="newPassword" name="user[newPassword]" value="<%= user.newPassword %>" 
+        <input type="text" class="form-control" id="newPassword" name="user[newPassword]" value="<%= (update) ? update.newPassword :  user.newPassword %>" 
             pattern="[a-zA-Z0-9]{5,20}" placeholder="Password" required>
     </div>
     <div class="form-group">
         <label for="rptPassword">Repeat Password</label>
-        <input type="text" class="form-control" id="rptPassword" name="user[rptPassword]" value="<%= user.rptPassword %>" 
+        <input type="text" class="form-control" id="rptPassword" name="user[rptPassword]" value="<%= (update) ? update.rptPassword : user.rptPassword %>" 
             pattern="[a-zA-Z0-9]{5,20}" placeholder="Password" required>
         <div class="feedback"></div>
     </div>
@@ -62,8 +64,8 @@ const userform = document.querySelector('form');
 const submit = userform.querySelector('button');
 const nameInput = document.getElementById('name');
 const passwordGroup = document.getElementById('passwordGroup');
-let passwordToggleState = false;
-let nameToggleState = false;
+let passwordToggleState = <%= (update) ? update.changePassword : 'false'  %>;
+let nameToggleState = <%= (update) ? update.changeName : 'false'  %>;
 
 userform.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -129,7 +131,7 @@ passwordGroup.addEventListener('click', (e) => {
 
 passwordGroup.addEventListener('input', (e) => {
     // console.log(e);
-    if (e.target.id === 'rptPassword') {
+    if (e.target.id === 'newPassword' || e.target.id === 'rptPassword') {
         checkIfNewPasswordsMatch();
     }
 });
@@ -165,8 +167,8 @@ passwordGroup.addEventListener('keypress', (e) => {
     }
 });
 
-toggleName();
-togglePassword();
+toggleName(nameToggleState);
+togglePassword(passwordToggleState);
 
 
 </script>
