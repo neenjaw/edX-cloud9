@@ -39,6 +39,10 @@ router.get('/:uid', middleware.isThisUserAuthorized, (req, res) => {
 
 router.put('/:uid', middleware.isThisUserAuthorized, (req, res) => {
     res.send(req.body.user);
+
+    //check what needs to be updated, validate input
+    //change display name
+    //use passport-local-mongoose module to change password
 });
 
 module.exports = router;
