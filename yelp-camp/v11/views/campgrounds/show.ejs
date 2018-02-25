@@ -1,0 +1,94 @@
+<% include ../partials/header %>
+
+<% include ../partials/nav %>
+
+<div class="container">
+  
+  <% include ../partials/flash %>
+
+  <div class="row">
+    <div class="col-md-3">
+      <p class="lead">YelpCamp</p>
+      <div class="list-group mb-3">
+        <li class="list-group-item active">Info 1</li>
+        <li class="list-group-item">Info 2</li>
+        <li class="list-group-item">Info 3</li>
+      </div>
+    </div>
+    <div class="col-md-9">
+
+      <div class="card mb-3">
+        <img class="card-img-top" src="<%= campground.image %>" alt="A picture of <%= campground.name %>">
+        <div class="card-body">
+          <h5 class="float-right">$9.00/night</h5>
+          <h4 class="card-title"><a href="#"><%= campground.name %></a></h4>
+          <p class="card-text"><%= campground.description %></p>
+          <p class="card-text">
+            <small class="text-muted">
+              <% if (!campground.updated) { %>
+                Posted <%= campground.created.getMonth() + 1 %>/<%= campground.created.getDate() %>/<%= campground.created.getFullYear() %>
+              <% } else { %>
+                Last updated <%= campground.updated.getMonth() + 1 %>/<%= campground.updated.getDate() %>/<%= campground.updated.getFullYear() %>
+              <% } %>
+                by <%= campground.author.name %>
+            </small>
+            <div>
+              <% if (user && campground.author.id.equals(user.id)) { %>
+                <form class="pl-1 float-right" action="/campgrounds/<%= campground.id %>?_method=DELETE" method="POST">
+                  <button class="btn btn-sm btn-danger">Delete</button>
+                </form>
+                
+                <a class="btn btn-sm btn-warning float-right" href="/campgrounds/<%= campground.id %>/edit">Edit</a>
+              <% } %>
+            </div>
+          </p>
+        </div>
+        <div class="card-footer">
+          <div class="text-right">
+            <a class="btn btn-success" href="/campgrounds/<%= campground.id %>/comments/new">Add new Comment</a>
+          </div>
+          <hr>
+          <% campground.comments.forEach((comment, index) => { %>
+          <div class="row">
+            <div class="col-md-12">
+              <h5>
+                <span>★★★★☆</span>
+                <strong><%= comment.author.name %></strong>
+                <small class="float-right text-muted">
+                  <% if (!comment.updated) { %>
+                    Posted <%= comment.created.getMonth() + 1 %>/<%= comment.created.getDate() %>/<%= comment.created.getFullYear() %>
+                  <% } else { %>
+                    Last updated <%= comment.updated.getMonth() + 1 %>/<%= comment.updated.getDate() %>/<%= comment.updated.getFullYear() %>
+                  <% } %>
+                </small>
+              </h5>
+              <p>
+                <%= comment.text %>
+              </p>
+              <% if (user && comment.author.id.equals(user.id)) { %>
+                <div class="clearfix">
+                  <form class="pl-1 float-right pl-1" action="/campgrounds/<%= campground.id %>/comments/<%= comment.id %>?_method=DELETE" method="POST">
+                    <button class="btn btn-sm btn-danger">Delete</button>
+                  </form>
+                  <a class="btn btn-sm btn-warning float-right" href="/campgrounds/<%= campground.id %>/comments/<%= comment.id %>/edit">Edit</a>
+                </div>
+              <% } %>
+              <% if (index < (campground.comments.length - 1)) { %>
+              <hr>
+              <% } %>
+            </div>
+          </div>
+          <% }); %>
+          
+          
+        </div>
+      </div>
+
+
+
+    </div>
+  </div>
+
+</div>
+
+<% include ../partials/footer %>

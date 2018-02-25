@@ -1,0 +1,38 @@
+<% include ../partials/header %>
+
+<% include ../partials/nav %>
+
+<div class="container text-center">
+
+  <% include ../partials/flash %>
+  
+  <header>
+    <h1>Register</h1>
+  </header>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="div-form">
+      <form action="/register" method="POST">
+        <div class="form-group">
+          <label for="username">Pick a Username</label>
+          <input type="text" class="form-control" id="username" name="username" aria-describedby="emailHelp" placeholder="Your Username Here" value="<% if (typeof username !== 'undefined') { %><%= username %><% } %>" required>
+          <!--<small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>-->
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" class="form-control" id="password" name="password" placeholder="Password" value="<% if (typeof password !== 'undefined') { %><%= password %><% } %>" required>
+        </div>
+        <div class="form-group">
+          <label for="displayName">Pick a Display Name</label>
+          <input type="text" class="form-control" id="displayName" name="displayName" placeholder="Your Display Name Here" value="<% if (typeof displayName !== 'undefined') { %><%= displayName %><% } %>" required>
+          <!--<small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>-->
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<% include ../partials/footer %>
