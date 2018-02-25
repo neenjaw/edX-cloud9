@@ -3,12 +3,17 @@ const mongoose = require('mongoose');
 module.exports = (function() {
 
     const campgroundSchema = mongoose.Schema({
-        name: String,
-        image: String,
-        description: String,
+        name: { type: String, required: true },
+        image: { type: String, required: true },
+        description: { type: String, required: true },
+        priceInCents: { type: Number, required: true },
+        location: String,
+        lat: Number,
+        lng: Number,
         author: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'User'
+            ref: 'User',
+            required: true
         },
         comments: [
             {

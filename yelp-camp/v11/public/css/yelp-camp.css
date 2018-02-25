@@ -38,6 +38,10 @@ body > div:first-of-type {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  align-items: center;
+}
+
+.card-img-top {
 }
 
 @media (max-width: 767px) {
@@ -50,4 +54,10 @@ body > div:first-of-type {
   .campground {  
     flex: 0 1 calc(100% - 2 * var(--campground-margin));  
   }
+}
+
+/* Google Maps */
+#map {
+  height: 300px;
+  width: 100%;
 }

@@ -5,6 +5,7 @@
 const express    = require('express');
 const router     = express.Router();
 const middleware = require('../middleware');
+const geocoder   = require('geocoder');
 
 // ============================
 // Mongoose Model Requires
@@ -58,22 +59,39 @@ router.post('/', middleware.isLoggedIn, (req, res) => {
     if ( 
         typeof campground.name        === 'undefined' || 
         typeof campground.image       === 'undefined' || 
-        typeof campground.description === 'undefined' 
+        typeof campground.description === 'undefined' ||
+        typeof campground.price === 'undefined'
     ) {
         res.flash('warning', 'Your input wasn\'t valid. Please fix.');
         res.redirect('/campgrounds/new');
     } else {
-        Campground
-            .create(campground, (err, newCampground) => {
-                if (err) {
-                    // console.log(err);
-                    res.flash('danger', `An error was encountered: ${err}`);
-                    res.redirect('back');
-                } else {
-                    res.flash('info', 'Your campsite has been created.');
-                    res.redirect('/campgrounds');
-                }
+
+        campground.priceInCents = Math.floor(campground.price * 100);
+        delete campground.price;
+
+        geocoder
+            .geocode(campground.location, (err, data) => {
+
+                // console.log(data);
+                // res.send(data);
+                
+                campground.lat = data.results[0].geometry.location.lat;
+                campground.lng = data.results[0].geometry.location.lng;
+                campground.location = data.results.formatted_address;
+
+                Campground
+                    .create(campground, (err, newCampground) => {
+                        if (err) {
+                        // console.log(err);
+                            res.flash('danger', `An error was encountered: ${err}`);
+                            res.redirect('back');
+                        } else {
+                            res.flash('info', 'Your campsite has been created.');
+                            res.redirect('/campgrounds');
+                        }
+                    });
             });
+        
     } 
 });
 
@@ -110,7 +128,11 @@ router.get('/:id', (req, res) => {
                         id: campground.author._id,
                         name: campground.author.displayName,
                     },
+                    price: ((campground.priceInCents / 100).toFixed(2)),
                     description: campground.description,
+                    location: campground.location,
+                    lat: campground.lat,
+                    lng: campground.lng,
                     created: campground.created,
                     updated: campground.updated,
                     comments: campground.comments.map((comment) => {
@@ -139,6 +161,8 @@ router.get('/:id/edit', middleware.isThisCampgroundOwner, (req, res) => {
         id: req.campground._id,
         name: req.campground.name,
         image: req.campground.image,
+        price: ((req.campground.priceInCents / 100).toFixed(2)),
+        location: req.campground.location,
         description: req.campground.description
     };
     
@@ -152,22 +176,37 @@ router.put('/:id', middleware.isThisCampgroundOwner, (req, res) => {
 
     campground.updated = Date.now();
 
+    campground.priceInCents = Math.floor(campground.price * 100);
+    delete campground.price;
+
     campground.description = req.sanitize(campground.description);
 
     if (!id) {
         res.redirect('/campgrounds');
     } else {
-        Campground
-            .where({ _id: id})
-            .update({ $set: campground }, (err, updatedCampground) => {
-                if (err) {
-                    // console.log(err);
-                    res.flash('danger', `An error was encountered: ${err}`);
-                    res.redirect(`/campgrounds/${id}/edit`);
-                } else {
-                    res.flash('success', 'Your campsite was updated!');
-                    res.redirect(`/campgrounds/${id}`);
-                }
+
+        geocoder
+            .geocode(campground.location, (err, data) => {
+
+                // console.log(data);
+                // res.send(data);
+
+                campground.lat = data.results[0].geometry.location.lat;
+                campground.lng = data.results[0].geometry.location.lng;
+                campground.location = data.results.formatted_address;
+
+                Campground
+                    .where({ _id: id})
+                    .update({ $set: campground }, (err, updatedCampground) => {
+                        if (err) {
+                            // console.log(err);
+                            res.flash('danger', `An error was encountered: ${err}`);
+                            res.redirect(`/campgrounds/${id}/edit`);
+                        } else {
+                            res.flash('success', 'Your campsite was updated!');
+                            res.redirect(`/campgrounds/${id}`);
+                        }
+                    });
             });
     }
 });
