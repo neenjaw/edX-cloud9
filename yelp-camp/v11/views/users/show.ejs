@@ -1,0 +1,174 @@
+<% include ../partials/header %>
+
+<% include ../partials/nav %>
+
+<div class="container">
+  
+  <% include ../partials/flash %>
+
+  <div class="row">
+    <div class="col-12">
+      <!-- <p class="lead">YelpCamp</p> -->
+
+        <form action="/users/<%= user.id %>?_method=PUT" method="POST">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" class="form-control" id="username" name="user[username]" value="<%= user.username %>" 
+                    placeholder="Username" aria-describedby="usernameDesc" pattern="[a-zA-Z]{1}[a-zA-Z\-_]{5,20}" required readonly>
+                <% if (user.isAdmin) { %><small id="usernameDesc" class="form-text">This user is an administrator.</small><% } %>
+            </div>
+            <div class="form-group">
+                <label for="name">Name - <a class="toggle-name" href="javascript:void(0);">change</a></label>
+                <input type="text" class="form-control" id="name" name="user[name]" value="<%= user.name %>" 
+                    placeholder="Username" pattern="[a-zA-Z0-9\-_]{3,20}" data-name="<%= user.name %>" readonly>
+            </div>
+            <div id="passwordGroup">
+            </div>
+            <button class="btn btn-primary hidden mb-2" type="submit">Submit changes</button>
+            <p class="text-muted">Account created <%= moment(user.created).fromNow() %><% if (user.updated) { %>, last updated <%= moment(user.updated).fromNow() %>.<% } else { %>.<% } %></p>
+        </form>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+const passwordDefault = `<div class="form-group">
+                            <label for="password">Password - <a class="toggle-password" href="javascript:void(0);">change password</a></label>
+                            <input type="text" class="form-control" id="password" name="user[password]" value="<%= user.password %>" placeholder="Password" readonly>
+                        </div>`;
+
+const passwordSubForm = `<div class="grouping">
+    <div class="form-group">
+        <label for="oldPassword">Old Password - <a class="toggle-password" href="javascript:void(0);">cancel password change</a></label>
+        <input type="password" class="form-control" id="oldPassword" name="user[oldPassword]" value="<%= user.oldPassword %>" 
+            placeholder="Password" required>
+    </div>
+    <div class="form-group">
+        <label for="newPassword">New Password</label>
+        <input type="text" class="form-control" id="newPassword" name="user[newPassword]" value="<%= user.newPassword %>" 
+            pattern="[a-zA-Z0-9]{5,20}" placeholder="Password" required>
+    </div>
+    <div class="form-group">
+        <label for="rptPassword">Repeat Password</label>
+        <input type="text" class="form-control" id="rptPassword" name="user[rptPassword]" value="<%= user.rptPassword %>" 
+            pattern="[a-zA-Z0-9]{5,20}" placeholder="Password" required>
+        <div class="feedback"></div>
+    </div>
+</div>`;
+
+const userform = document.querySelector('form');
+const submit = userform.querySelector('button');
+const nameInput = document.getElementById('name');
+const passwordGroup = document.getElementById('passwordGroup');
+let passwordToggleState = false;
+let nameToggleState = false;
+
+userform.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    // if password change selected, check the passwords before submit
+    if (passwordToggleState) {
+        if(!checkIfNewPasswordsMatch()) return false;
+    }
+
+    // if no changes selected, don't submit
+    if (!passwordToggleState && !nameToggleState) return false;
+    
+    return userform.submit();
+});
+
+function toggleName(value = false) {
+    if (value) {
+        nameInput.readOnly = false;
+        nameInput.parentElement.querySelector('.toggle-name').textContent = 'cancel name change'
+    } else {
+        nameInput.readOnly = true;
+        nameInput.value = nameInput.dataset.name;
+        nameInput.parentElement.querySelector('.toggle-name').textContent = 'change'
+    }
+
+    nameToggleState = value;
+
+    checkIfNeedSubmitButton()
+}
+
+userform.addEventListener('click', (e) => {
+    if (e.target.classList.contains('toggle-name')) {
+        toggleName(!nameToggleState);
+    }
+});
+
+function togglePassword(value = false) {
+    if (value) {
+        passwordGroup.innerHTML = passwordSubForm;
+    } else {
+        passwordGroup.innerHTML = passwordDefault;
+    }
+
+    passwordToggleState = value;  
+
+    checkIfNeedSubmitButton()
+}
+
+function checkIfNeedSubmitButton() {
+    if (nameToggleState || passwordToggleState) {
+        submit.classList.remove('hidden');
+    } else {
+        submit.classList.add('hidden');
+    }
+} 
+
+passwordGroup.addEventListener('click', (e) => {
+    // console.log(e);
+    if (e.target.classList.contains('toggle-password')) {
+        togglePassword(!passwordToggleState);
+    }
+});
+
+passwordGroup.addEventListener('input', (e) => {
+    // console.log(e);
+    if (e.target.id === 'rptPassword') {
+        checkIfNewPasswordsMatch();
+    }
+});
+
+function checkIfNewPasswordsMatch() {
+    const newPw = document.getElementById('newPassword');
+    const rptPw = document.getElementById('rptPassword');
+    const feedback = rptPw.parentElement.querySelector('.feedback');
+
+    if (newPw.value === rptPw.value) {
+        rptPw.classList.remove('is-invalid');
+        rptPw.classList.add('is-valid');
+        feedback.classList.remove('invalid-feedback');
+        feedback.classList.add('valid-feedback');
+        feedback.textContent = "Looks good!";
+
+        return true;
+    } else {
+        rptPw.classList.remove('is-valid');
+        rptPw.classList.add('is-invalid');
+        feedback.classList.remove('valid-feedback');
+        feedback.classList.add('invalid-feedback');
+        feedback.textContent = "They gotta match!";
+
+        return false;
+    }
+}
+passwordGroup.addEventListener('keypress', (e) => {
+    if(e.target.id === 'newPassword' || e.target.id === 'rptPassword') {
+        if (e.key.replace(/[^a-zA-Z0-9]/g,'')=='') {
+            e.preventDefault()
+        };
+    }
+});
+
+toggleName();
+togglePassword();
+
+
+</script>
+
+<% include ../partials/footer %>

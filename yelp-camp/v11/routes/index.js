@@ -115,13 +115,17 @@ router.get('/logout', (req, res) => {
 function isValidInput(type, input) {
     const types = {
         username: {
-            pattern: '[a-zA-Z]{1}[a-zA-Z_]{5,}'
+            // disable eslint for this line since the string represents an uncompiled regex
+            // eslint-disable-next-line no-useless-escape
+            pattern: '[a-zA-Z]{1}[a-zA-Z\-_]{5,20}'
         },
         password: {
-            pattern: '[a-zA-Z0-9]{5,16}'
+            pattern: '[a-zA-Z0-9]{5,20}'
         },
         displayName: {
-            pattern: '[a-zA-Z0-9]{3,}'
+            // disable eslint for this line since the string represents an uncompiled regex
+            // eslint-disable-next-line no-useless-escape
+            pattern: '[a-zA-Z0-9\-_]{3,20}'
         }
     };
 

@@ -4,7 +4,7 @@ function isActive(currentPageName, targetPageName) {
 }
 
 function printLink(text, href, linkPageName, currentPageName, active) {
-  active = active || isActive(pageName, linkPageName);
+  active = active || isActive(currentPageName, linkPageName);
   let span = active ? ' <span class="sr-only">(current)</span>' : '';
   let link = active ? '#' : href;
 
@@ -12,11 +12,15 @@ function printLink(text, href, linkPageName, currentPageName, active) {
 }
 
 function printLi(text, href, linkPageName, currentPageName) {
-  let active = isActive(pageName, linkPageName);
+  let active = isActive(currentPageName, linkPageName);
   let activeClass = active ? ' active' : '';
   let link = printLink(text, href, linkPageName, currentPageName, active);
 
   return `<li class="nav-item${activeClass}">${link}</li>`;
+}
+
+if (!locals.pageName) {
+  locals.pageName = '';
 }
 %>
 
@@ -31,7 +35,6 @@ function printLi(text, href, linkPageName, currentPageName) {
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
-        <%- printLi('Home', '/', 'landing', pageName) %>
         <%- printLi('Campgrounds', '/campgrounds', 'campgrounds/index', pageName) %>
         <%- printLi('Add Campground', '/campgrounds/new', 'campgrounds/new', pageName) %>
       </ul>
@@ -40,7 +43,7 @@ function printLi(text, href, linkPageName, currentPageName) {
         <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
         <li class="nav-item"><a class="nav-link" href="/register">Sign up</a></li>
         <% } else { %>
-        <li class="nav-item"><a class="nav-link disabled" href="#">Signed in as <%= user.name %></a></li>
+        <li class="nav-item"><a class="nav-link" href="/users/<%= user.id %>">Signed in as <%= user.name %></a></li>
         <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
         <% } %>
       </ul>

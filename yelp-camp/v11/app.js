@@ -18,6 +18,7 @@ const passportLocalMongoose = require('passport-local-mongoose');
 // ============================
 
 const indexRoutes      = require('./routes/index');
+const userRoutes       = require('./routes/user');
 const campgroundRoutes = require('./routes/campground');
 const commentRoutes    = require('./routes/comment');
 
@@ -109,6 +110,7 @@ app.use((req, res, next) => {
 // ============================
 
 app.use(indexRoutes);
+app.use('/users', userRoutes);
 app.use('/campgrounds', campgroundRoutes);
 app.use('/campgrounds/:id/comments', commentRoutes);
 

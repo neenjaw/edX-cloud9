@@ -76,7 +76,7 @@ router.post('/', middleware.isLoggedIn, (req, res) => {
                 // res.send(data);
                 if (err) {
                     res.flash('danger', `An error was encountered: ${err.message}`);
-                    res.redirect(`/campgrounds/${id}`);
+                    res.redirect('/campgrounds');
                 } else {
                     campground.lat = data.results[0].geometry.location.lat;
                     campground.lng = data.results[0].geometry.location.lng;

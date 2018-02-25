@@ -41,9 +41,6 @@ body > div:first-of-type {
   align-items: center;
 }
 
-.card-img-top {
-}
-
 @media (max-width: 767px) {
   .campground {  
     flex: 0 1 calc(50% - 2 * var(--campground-margin));  
@@ -54,6 +51,14 @@ body > div:first-of-type {
   .campground {  
     flex: 0 1 calc(100% - 2 * var(--campground-margin));  
   }
+}
+
+.hidden {
+  display: none;
+}
+
+#usernameDesc {
+  color: darkred;
 }
 
 /* Google Maps */

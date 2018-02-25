@@ -10,7 +10,8 @@ module.exports = (function () {
         created: {
             type: Date, default: Date.now
         },
-        updated: Date
+        updated: Date,
+        isAdmin: { type: Boolean, default: false }
     });
 
     userSchema.plugin(passportLocalMongoose);
