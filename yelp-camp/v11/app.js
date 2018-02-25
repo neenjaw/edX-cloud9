@@ -98,7 +98,8 @@ app.use((req, res, next) => {
         res.locals.user = {
             id: req.user._id,
             username: req.user.username,
-            name: req.user.displayName
+            name: req.user.displayName,
+            isAdmin: req.user.isAdmin
         };
     }
 

@@ -34,7 +34,7 @@
                 by <%= campground.author.name %>
             </small>
             <div>
-              <% if (user && campground.author.id.equals(user.id)) { %>
+              <% if (user && (campground.author.id.equals(user.id) || user.isAdmin)) { %>
                 <form class="pl-1 float-right" action="/campgrounds/<%= campground.id %>?_method=DELETE" method="POST">
                   <button class="btn btn-sm btn-danger"><i class="fas fa-times"></i> Delete</button>
                 </form>
@@ -67,7 +67,7 @@
               </p>
               <div class="clearfix">
                 <span><i class="fas fa-user"></i> <%= comment.author.name %></span>
-                <% if (user && comment.author.id.equals(user.id)) { %>
+                <% if (user && (comment.author.id.equals(user.id) || user.isAdmin)) { %>
                   <form class="pl-1 float-right pl-1" action="/campgrounds/<%= campground.id %>/comments/<%= comment.id %>?_method=DELETE" method="POST">
                     <button class="btn btn-sm btn-danger"><i class="fas fa-times"></i> Delete</button>
                   </form>

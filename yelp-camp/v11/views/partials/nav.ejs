@@ -43,7 +43,10 @@ if (!locals.pageName) {
         <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
         <li class="nav-item"><a class="nav-link" href="/register">Sign up</a></li>
         <% } else { %>
-        <li class="nav-item"><a class="nav-link" href="/users/<%= user.id %>">Signed in as <%= user.name %></a></li>
+        <li class="nav-item"><a class="nav-link" href="/users/<%= user.id %>">Hi, <%= user.name %></a></li>
+        <% if (user.isAdmin) {%>
+        <li class="nav-item"><a class="nav-link" href="/users/admin"><i class="fas fa-cogs"></i> Admin Panel</a></li>
+        <% } %>
         <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
         <% } %>
       </ul>

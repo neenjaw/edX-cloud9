@@ -55,7 +55,7 @@ middlewareObj.isThisCampgroundOwner = function (req, res, next) {
                     }
 
                     //does the user own the campground?
-                    if (!campground.author.equals(req.user._id)) {
+                    if (!campground.author.equals(req.user._id) && !req.user.isAdmin) {
                         res.flash('danger', 'You are not authorized to edit this page!');                        
                         res.redirect(`/campgrounds/${id}`);
                     } else {
@@ -95,7 +95,7 @@ middlewareObj.isThisCommentOwner = function (req, res, next) {
                     }
 
                     //does the user own the comment?
-                    if (!comment.author.equals(req.user._id)) {
+                    if (!comment.author.equals(req.user._id) && !req.user.isAdmin) {
                         res.flash('danger', 'You are not authorized to edit this comment!');                        
                         res.redirect('back');
                     } else {
@@ -127,11 +127,11 @@ middlewareObj.isThisUserAuthorized = function (req, res, next) {
                 } else {
 
                     if (!user) {
-                        res.flash('danger', 'This comment does not exist');
+                        res.flash('danger', 'This user does not exist');
                         return res.redirect('/campgrounds');
                     }
 
-                    //does the user own the comment?
+                    //is this the user?
                     if (!user.equals(req.user._id)) {
                         res.flash('danger', 'You are not authorized to view this user!');
                         res.redirect('back');
@@ -141,6 +141,25 @@ middlewareObj.isThisUserAuthorized = function (req, res, next) {
                     }
                 }
             });
+    }
+};
+
+middlewareObj.isThisUserAdmin = function (req, res, next) {
+    // is user logged in?
+    if (!req.isAuthenticated()) {
+
+        //if not, redirect to log in
+        req.session.returnToPath = req.session.returnToPath || req.originalUrl;
+        res.flash('warning', 'Please log in first!');
+        res.redirect('/login');
+
+    } else {
+        if (!req.user.isAdmin) {
+            res.flash('danger', 'Restricted! You are not authorized.');
+            res.redirect('/campgrounds');
+        } else {
+            next();
+        }
     }
 };
 

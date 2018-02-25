@@ -28,7 +28,7 @@ router.get('/', (req, res) => {
             res.redirect('back');
         } else {
             //Valid Campground Result
-            campgrounds = campgrounds.map((campground) => {
+            res.locals.campgrounds = campgrounds.map((campground) => {
                 return {
                     name: campground.name,
                     image: campground.image,
@@ -36,10 +36,7 @@ router.get('/', (req, res) => {
                 };
             });
 
-            res.render('campgrounds/index', {
-                pageName: 'campgrounds/index',
-                campgrounds
-            });
+            res.render('campgrounds/index', { pageName: 'campgrounds/index' });
         }
     });
 });
@@ -66,7 +63,7 @@ router.post('/', middleware.isLoggedIn, (req, res) => {
         res.redirect('/campgrounds/new');
     } else {
 
-        campground.priceInCents = Math.floor(campground.price * 100);
+        campground.priceInCents = Math.round(campground.price * 100);
         delete campground.price;
 
         geocoder
@@ -180,7 +177,7 @@ router.put('/:id', middleware.isThisCampgroundOwner, (req, res) => {
 
     campground.updated = Date.now();
 
-    campground.priceInCents = Math.floor(campground.price * 100);
+    campground.priceInCents = Math.round(campground.price * 100);
     delete campground.price;
 
     campground.description = req.sanitize(campground.description);

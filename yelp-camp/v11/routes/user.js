@@ -45,4 +45,8 @@ router.put('/:uid', middleware.isThisUserAuthorized, (req, res) => {
     //use passport-local-mongoose module to change password
 });
 
+router.get('/admin', middleware.isThisUserAdmin, (req, res) => {
+    res.send('Admin panel here.');
+});
+
 module.exports = router;
