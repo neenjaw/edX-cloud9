@@ -69,6 +69,8 @@ app.use(require('express-session')({
 
 app.use(flash());
 
+app.locals.moment = require('moment');
+
 // ============================
 // Passport Setup 
 // ============================

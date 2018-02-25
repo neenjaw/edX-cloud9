@@ -74,22 +74,26 @@ router.post('/', middleware.isLoggedIn, (req, res) => {
 
                 // console.log(data);
                 // res.send(data);
-                
-                campground.lat = data.results[0].geometry.location.lat;
-                campground.lng = data.results[0].geometry.location.lng;
-                campground.location = data.results.formatted_address;
+                if (err) {
+                    res.flash('danger', `An error was encountered: ${err.message}`);
+                    res.redirect(`/campgrounds/${id}`);
+                } else {
+                    campground.lat = data.results[0].geometry.location.lat;
+                    campground.lng = data.results[0].geometry.location.lng;
+                    campground.location = data.results[0].formatted_address;
 
-                Campground
-                    .create(campground, (err, newCampground) => {
-                        if (err) {
-                        // console.log(err);
-                            res.flash('danger', `An error was encountered: ${err}`);
-                            res.redirect('back');
-                        } else {
-                            res.flash('info', 'Your campsite has been created.');
-                            res.redirect('/campgrounds');
-                        }
-                    });
+                    Campground
+                        .create(campground, (err, newCampground) => {
+                            if (err) {
+                            // console.log(err);
+                                res.flash('danger', `An error was encountered: ${err}`);
+                                res.redirect('back');
+                            } else {
+                                res.flash('info', 'Your campsite has been created.');
+                                res.redirect('/campgrounds');
+                            }
+                        });
+                }
             });
         
     } 
@@ -191,24 +195,29 @@ router.put('/:id', middleware.isThisCampgroundOwner, (req, res) => {
                 // console.log(data);
                 // res.send(data);
 
-                campground.lat = data.results[0].geometry.location.lat;
-                campground.lng = data.results[0].geometry.location.lng;
-                campground.location = data.results.formatted_address;
+                if (err) {
+                    res.flash('danger', `An error was encountered: ${err.message}`);
+                    res.redirect(`/campgrounds/${id}`);
+                } else {
+                    campground.lat = data.results[0].geometry.location.lat;
+                    campground.lng = data.results[0].geometry.location.lng;
+                    campground.location = data.results[0].formatted_address;
 
-                Campground
-                    .where({ _id: id})
-                    .update({ $set: campground }, (err, updatedCampground) => {
-                        if (err) {
-                            // console.log(err);
-                            res.flash('danger', `An error was encountered: ${err}`);
-                            res.redirect(`/campgrounds/${id}/edit`);
-                        } else {
-                            res.flash('success', 'Your campsite was updated!');
-                            res.redirect(`/campgrounds/${id}`);
-                        }
-                    });
+                    Campground
+                        .where({ _id: id })
+                        .update({ $set: campground }, (err, updatedCampground) => {
+                            if (err) {
+                                // console.log(err);
+                                res.flash('danger', `An error was encountered: ${err}`);
+                                res.redirect(`/campgrounds/${id}/edit`);
+                            } else {
+                                res.flash('success', 'Your campsite was updated!');
+                                res.redirect(`/campgrounds/${id}`);
+                            }
+                        });
+                }
             });
-    }
+    } 
 });
 
 // DELETE

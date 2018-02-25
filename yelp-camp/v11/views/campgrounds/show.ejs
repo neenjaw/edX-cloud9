@@ -8,9 +8,9 @@
 
   <div class="row">
     <div class="col-md-3">
-      <p class="lead">YelpCamp</p>
+      <!-- <p class="lead">YelpCamp</p> -->
       <div class="list-group mb-3">
-        <li class="list-group-item active">Info 1</li>
+        <li class="list-group-item active">Location:<br><%= campground.location %></li>
         <li class="list-group-item">Info 2</li>
         <li class="list-group-item">Info 3</li>
       </div>
@@ -27,53 +27,53 @@
           <p class="card-text">
             <small class="text-muted">
               <% if (!campground.updated) { %>
-                Posted <%= campground.created.getMonth() + 1 %>/<%= campground.created.getDate() %>/<%= campground.created.getFullYear() %>
+                Posted <%= moment(campground.created).fromNow() %>
               <% } else { %>
-                Last updated <%= campground.updated.getMonth() + 1 %>/<%= campground.updated.getDate() %>/<%= campground.updated.getFullYear() %>
+                Last updated <%= moment(campground.updated).fromNow() %>
               <% } %>
                 by <%= campground.author.name %>
             </small>
             <div>
               <% if (user && campground.author.id.equals(user.id)) { %>
                 <form class="pl-1 float-right" action="/campgrounds/<%= campground.id %>?_method=DELETE" method="POST">
-                  <button class="btn btn-sm btn-danger">Delete</button>
+                  <button class="btn btn-sm btn-danger"><i class="fas fa-times"></i> Delete</button>
                 </form>
                 
-                <a class="btn btn-sm btn-warning float-right" href="/campgrounds/<%= campground.id %>/edit">Edit</a>
+                <a class="btn btn-sm btn-warning float-right" href="/campgrounds/<%= campground.id %>/edit"><i class="fas fa-edit"></i> Edit</a>
               <% } %>
             </div>
           </p>
         </div>
         <div class="card-footer">
           <div class="text-right">
-            <a class="btn btn-success" href="/campgrounds/<%= campground.id %>/comments/new">Add new Comment</a>
+            <a class="btn btn-success" href="/campgrounds/<%= campground.id %>/comments/new"><i class="fas fa-plus"></i> Add new Comment</a>
           </div>
           <hr>
           <% campground.comments.forEach((comment, index) => { %>
           <div class="row">
             <div class="col-md-12">
-              <h5>
+              <h6>
                 <span>★★★★☆</span>
-                <strong><%= comment.author.name %></strong>
                 <small class="float-right text-muted">
                   <% if (!comment.updated) { %>
-                    Posted <%= comment.created.getMonth() + 1 %>/<%= comment.created.getDate() %>/<%= comment.created.getFullYear() %>
+                    Posted <%= moment(comment.created).fromNow() %>
                   <% } else { %>
-                    Last updated <%= comment.updated.getMonth() + 1 %>/<%= comment.updated.getDate() %>/<%= comment.updated.getFullYear() %>
+                    Last updated <%= moment(comment.updated).fromNow() %>
                   <% } %>
                 </small>
-              </h5>
+              </h6>
               <p>
-                <%= comment.text %>
+                "<%= comment.text %>"
               </p>
-              <% if (user && comment.author.id.equals(user.id)) { %>
-                <div class="clearfix">
+              <div class="clearfix">
+                <span><i class="fas fa-user"></i> <%= comment.author.name %></span>
+                <% if (user && comment.author.id.equals(user.id)) { %>
                   <form class="pl-1 float-right pl-1" action="/campgrounds/<%= campground.id %>/comments/<%= comment.id %>?_method=DELETE" method="POST">
-                    <button class="btn btn-sm btn-danger">Delete</button>
+                    <button class="btn btn-sm btn-danger"><i class="fas fa-times"></i> Delete</button>
                   </form>
-                  <a class="btn btn-sm btn-warning float-right" href="/campgrounds/<%= campground.id %>/comments/<%= comment.id %>/edit">Edit</a>
-                </div>
-              <% } %>
+                  <a class="btn btn-sm btn-warning float-right" href="/campgrounds/<%= campground.id %>/comments/<%= comment.id %>/edit"><i class="fas fa-edit"></i> Edit</a>
+                <% } %>
+              </div>
               <% if (index < (campground.comments.length - 1)) { %>
               <hr>
               <% } %>
