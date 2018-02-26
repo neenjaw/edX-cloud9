@@ -153,4 +153,6 @@ router.put('/:uid', middleware.isThisUserAuthorized, (req, res) => {
     }
 });
 
+//TODO: Need a user delete route
+
 module.exports = router;
