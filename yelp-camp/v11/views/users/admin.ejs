@@ -1,0 +1,85 @@
+<% include ../partials/header %>
+
+<% include ../partials/nav %>
+
+<div class="container">
+  <% include ../partials/flash %>
+
+  <h1>Admin Panel</h1>
+</div>
+<div class="container">
+    <p>Control Panel For centralized administration of posts and users.</p>
+    <hr>
+</div>
+
+<div class="container-fluid">
+    <h3>Users</h3>
+    <table class="table table-sm table-striped user-table">
+        <thead>
+            <tr class="bg-primary">
+                <th scope="col">#</th>
+                <th scope="col">Username</th>
+                <th scope="col">Name</th>
+                <th scope="col">Admin</th>
+                <th scope="col">Posts</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% if (users) { %>
+                <% users.forEach((user, idx) => { %>
+                <tr>
+                    <th scope="row"><%= (idx+1) %></th>
+                    <td><%= user.username %></td>
+                    <td><%= user.name %></td>
+                    <td><%- (user.isAdmin) ? '<i class="far fa-check-square"></i>':'<i class="far fa-square"></i>' %></td>
+                    <td>
+                        <a class="btn btn-sm btn-outline-secondary"><i class="fas fa-link user-posts"></i></a>
+                    </td>
+                    <td>
+                        <a class="btn btn-sm btn-outline-warning"><i class="far fa-edit user-edit"></i></a>
+                        <a class="btn btn-sm btn-outline-danger"><i class="fas fa-minus-circle user-delete"></i></a>
+                    </td>
+                </tr>
+                <% }); %>
+            <% } %>
+        </tbody>
+    </table>
+</div>
+  
+<div class="container-fluid">
+    <h3>Campgrounds</h3>
+    <table class="table table-sm table-striped">
+        <thead>
+            <tr class="bg-success">
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Location</th>
+                <th scope="col">Author</th>
+                <th scope="col">Link</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% if (campgrounds) { %>
+                <% campgrounds.forEach((campground, idx) => { %>
+                <tr>
+                    <th scope="row"><%= (idx+1) %></th>
+                    <td><%= campground.name %></td>
+                    <td><%= campground.location %></td>
+                    <td>Author</td>
+                    <td>
+                        <a class="btn btn-sm btn-outline-secondary"><i class="fas fa-link"></i></a>
+                    </td>
+                    <td>
+                        <a class="btn btn-sm btn-outline-warning"><i class="far fa-edit user-edit"></i></a>
+                        <a class="btn btn-sm btn-outline-danger"><i class="fas fa-minus-circle user-delete"></i></a>
+                    </td>
+                </tr>
+                <% }); %>
+            <% } %>
+        </tbody>
+    </table>
+</div>
+
+<% include ../partials/footer %>

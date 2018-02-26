@@ -16,13 +16,65 @@ const router = express.Router();
 // Mongoose Model Requires
 // ============================
 
+const Campground = require('../models/campground');
 const User = require('../models/user');
 
 // ============================
 // User / Admin Routes
 // ============================
 
-//Show User Account Page
+// Show the Admin Panel
+router.get('/admin', (req, res) => { // put this back in later middleware.isThisUserAdmin, (req, res) => {
+    Campground
+        .find()
+        .exec((err, campgrounds) => {
+            if (err) {
+                res.flash('danger', 'An error occured while getting campgrounds for the admin panel');
+                res.redirect('/campgrounds');
+            } else {
+                //put the campgrounds into locals for use in the template
+                res.locals.campgrounds = campgrounds.map(campground => {
+                    return {
+                        id: campground._id,
+                        name: campground.name,
+                        image: campground.image,
+                        description: campground.description,
+                        price: ((campground.priceInCents / 100).toFixed(2)),
+                        location: campground.location,
+                        lat: campground.lat,
+                        lng: campground.lng,
+                        author: campground.author,
+                        created: campground.created,
+                        updated: campground.updated
+                    };
+                });
+
+                //now get the users
+                User.find()
+                    .exec((err, users) => {
+                        if (err) {
+                            res.flash('danger', 'An error occured while getting users for the admin panel');
+                            res.redirect('/campgrounds');
+                        } else {
+                            res.locals.users = users.map(user => {
+                                return {
+                                    username: user.username,
+                                    password: '********',
+                                    name: user.displayName,
+                                    created: user.created,
+                                    updated: user.updated,
+                                    isAdmin: user.isAdmin
+                                };
+                            });
+
+                            res.render('users/admin');
+                        }
+                    });
+            }
+        });
+});
+
+// Show User Account Page
 router.get('/:uid', middleware.isThisUserAuthorized, (req, res) => {
     function getSessionVarsFromErr() {
         const result = req.session.userUpdate;
@@ -115,10 +167,6 @@ router.put('/:uid', middleware.isThisUserAuthorized, (req, res) => {
             rptPassword: update.rptPassword || undefined
         };
     }
-});
-
-router.get('/admin', middleware.isThisUserAdmin, (req, res) => {
-    res.send('Admin panel here.');
 });
 
 module.exports = router;

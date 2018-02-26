@@ -13,6 +13,8 @@ const passport              = require('passport');
 const LocalStrategy         = require('passport-local');
 const passportLocalMongoose = require('passport-local-mongoose');
 
+const reload = require('reload');
+
 // ============================
 // Route Includes
 // ============================
@@ -45,6 +47,8 @@ const seed       = require('./seed');
 // ============================
 
 const app = express();
+
+app.set('port', process.env.PORT || 3000);
 
 // View Engine
 app.set('view engine', 'ejs');
@@ -118,7 +122,8 @@ app.use('/campgrounds/:id/comments', commentRoutes);
 // ============================
 // Server Start / Listen
 // ============================
+reload(app);
 
-app.listen(3000, 'localhost', () => {
+app.listen(app.get('port'), 'localhost', () => {
     console.log('Yelp-Camp Server starting on localhost:3000');
 });
