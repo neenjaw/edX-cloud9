@@ -26,3 +26,7 @@ Each Comment has:
 |     |     |     |     |
 | NEW      | /campgrounds/:id/comments/new | GET | Display form to add a new comments |
 | CREATE   | /campgrounds/:id/comments | POST | Adds a new comment to the campground in the DB |
+
+## To run locally
+
+`nodemon -e js,ejs,css app.js`
