@@ -67,6 +67,7 @@ router.post('/', middleware.isLoggedIn, (req, res) => {
                     res.redirect(`/campgrounds/${id}`);
                 } else {
                     comment.author = req.user._id;
+                    comment.campground = campground._id;
                     comment.save();
 
                     req.user.comments.push(comment._id);

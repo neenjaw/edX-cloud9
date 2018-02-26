@@ -11,6 +11,10 @@ module.exports = (function() {
         created: {
             type: Date, default: Date.now
         },
+        campground: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Campground'
+        },
         updated: Date
     });
 

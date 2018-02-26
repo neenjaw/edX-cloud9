@@ -23,8 +23,44 @@ const User = require('../models/user');
 // User / Admin Routes
 // ============================
 
+// Show User Profile Page
+router.get('/:uid', (req, res) => { // TODO: remove this <-- middleware.isLoggedIn, (req, res) => {
+    User.findById(req.params.uid)
+        .populate('campgrounds')
+        .populate('comments')
+        .exec((err, user) => {
+            res.locals.profileUser = {
+                id: user._id,
+                username: user.username,
+                name: user.displayName,
+                created: user.created,
+                updated: user.updated,
+                campgrounds: user.campgrounds.map(campground => {
+                    return {
+                        id: campground._id,
+                        name: campground.name,
+                        description: campground.description,
+                        image: campground.image,
+                        location: campground.location,
+                        created: campground.created,
+                        updated: campground.updated
+                    };
+                }),
+                comments: user.comments.map(comment => {
+                    return {
+                        text: comment.text,
+                        created: comment.created,
+                        updated: comment.updated
+                    };
+                })
+            };
+
+            res.render('users/show');
+        });
+});
+
 // Show User Account Page
-router.get('/:uid', middleware.isThisUserAuthorized, (req, res) => {
+router.get('/:uid/edit', middleware.isThisUserAuthorized, (req, res) => {
     function getSessionVarsFromErr() {
         const result = req.session.userUpdate;
         delete req.session.userUpdate;
@@ -47,7 +83,7 @@ router.get('/:uid', middleware.isThisUserAuthorized, (req, res) => {
         password: '********'
     };
 
-    res.render('users/show');
+    res.render('users/edit');
 });
 
 router.put('/:uid', middleware.isThisUserAuthorized, (req, res) => {

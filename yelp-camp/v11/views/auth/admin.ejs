@@ -20,8 +20,8 @@
                 <th scope="col">#</th>
                 <th scope="col">Username</th>
                 <th scope="col">Name</th>
+                <th scope="col">Profile</th>
                 <th scope="col">Admin</th>
-                <th scope="col">Posts</th>
                 <th scope="col">Action</th>
             </tr>
         </thead>
@@ -32,10 +32,10 @@
                     <th scope="row"><%= (idx+1) %></th>
                     <td><%= user.username %></td>
                     <td><%= user.name %></td>
-                    <td><%- (user.isAdmin) ? '<i class="far fa-check-square"></i>':'<i class="far fa-square"></i>' %></td>
                     <td>
-                        <a class="btn btn-sm btn-outline-secondary" href="/users/profile/<%= user.id %>"><i class="fas fa-link user-posts"></i></a>
+                        <a class="btn btn-sm btn-outline-secondary" href="/users/<%= user.id %>"><i class="fas fa-link user-posts"></i></a>
                     </td>
+                    <td><%- (user.isAdmin) ? '<i class="far fa-check-square"></i>':'<i class="far fa-square"></i>' %></td>
                     <td>
                         <a class="btn btn-sm btn-outline-warning" href="#" data-user-target="<%= user.id %>"><i class="far fa-edit user-edit"></i></a>
                         <form class="admin-del-form" action="/users/<%= user.id %>?_method=DELETE" method="POST">

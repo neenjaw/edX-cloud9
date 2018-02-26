@@ -61,6 +61,47 @@ body > div:first-of-type {
   display: inline-block;
 }
 
+.user-campground {
+  display: flex;
+}
+
+.user-campground > div {
+  flex: 1;
+}
+
+.user-campground > div:first-child {
+  flex: 0;
+}
+
+.user-campground-text > div {
+  display: flex;
+  justify-content: space-between;
+}
+
+.user-campgrounds .thumbnail {
+  position: relative;
+  width: 75px;
+  height: 75px;
+  overflow: hidden;
+  border: 1px solid black;
+}
+
+.user-campgrounds .thumbnail img {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  height: 100%;
+  width: auto;
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+.user-campgrounds .thumbnail img.portrait {
+  width: 100%;
+  height: auto;
+}
+
 #usernameDesc {
   color: darkred;
 }

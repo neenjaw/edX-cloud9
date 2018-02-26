@@ -28,7 +28,7 @@ router.get('/', (req, res) => {
 });
 
 // Show the Admin Panel
-router.get('/admin', (req, res) => { // put this back in later middleware.isThisUserAdmin, (req, res) => {
+router.get('/admin', (req, res) => {  // TODO: remove this <-- put this back in later middleware.isThisUserAdmin, (req, res) => {
     Campground
         .find()
         .exec((err, campgrounds) => {
@@ -72,7 +72,7 @@ router.get('/admin', (req, res) => { // put this back in later middleware.isThis
                                 };
                             });
 
-                            res.render('users/admin');
+                            res.render('auth/admin');
                         }
                     });
             }
