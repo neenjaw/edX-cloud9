@@ -12,6 +12,7 @@ const middleware = require('../middleware');
 
 const Campground = require('../models/campground');
 const Comment    = require('../models/comment');
+const User       = require('../models/user');
 
 // ============================
 // Comment Routes
@@ -65,16 +66,14 @@ router.post('/', middleware.isLoggedIn, (req, res) => {
                     res.flash('danger', `An error was encountered: ${err}`);
                     res.redirect(`/campgrounds/${id}`);
                 } else {
-                    
-                    //add id to comment
                     comment.author = req.user._id;
-                    //save comment
                     comment.save();
+
+                    req.user.comments.push(comment._id);
+                    req.user.save();
 
                     //push comment id to campground
                     campground.comments.push(comment._id);
-
-                    //save campground
                     campground.save();
                     
                     res.flash('info', 'Your comment was posted.');
@@ -147,20 +146,27 @@ router.delete('/:commentId', middleware.isThisCommentOwner, (req, res) => {
             .findByIdAndRemove(commentId, (err) => {
                 if (err) {
                     // console.log(err);
-                    res.flash('danger', `An error was encountered: ${err}`);
+                    res.flash('danger', `An error was encountered deleting the comment: ${err}`);
                     res.redirect(`/campgrounds/${campgroundId}`);
                 } else {
-                    const query = { $pull: { comments: commentId }};
+                    const query = { $pull: { comments: commentId } };
 
                     Campground
                         .findByIdAndUpdate(campgroundId, query, (err, campground) => {
                             if (err) {
                                 // console.log(err);
-                                res.flash('danger', `An error was encountered: ${err}`);
+                                res.flash('danger', `An error was encountered deleting comment from campground: ${err}`);
                                 res.redirect('back');
                             } else {
-                                res.flash('info', 'Your comment was sucessfully deleted.');
-                                res.redirect(`/campgrounds/${campgroundId}`);
+                                User.findByIdAndUpdate(req.user._id, query, (err) => {
+                                    if (err) {
+                                        res.flash('danger', `An error was encountered deleting comment from user history: ${err}`);
+                                        res.redirect('back');
+                                    } else {
+                                        res.flash('info', 'Your comment was sucessfully deleted.');
+                                        res.redirect(`/campgrounds/${campgroundId}`);
+                                    }
+                                });
                             }
                         });
                 }

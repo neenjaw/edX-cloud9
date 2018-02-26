@@ -57,6 +57,10 @@ body > div:first-of-type {
   display: none;
 }
 
+.admin-del-form {
+  display: inline-block;
+}
+
 #usernameDesc {
   color: darkred;
 }

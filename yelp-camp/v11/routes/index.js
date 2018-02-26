@@ -15,6 +15,7 @@ const router = express.Router();
 // Mongoose Model Requires
 // ============================
 
+const Campground = require('../models/campground');
 const User = require('../models/user');
 
 // ============================
@@ -24,6 +25,58 @@ const User = require('../models/user');
 // Landing Route
 router.get('/', (req, res) => {
     res.render('landing', {pageName:'landing'});
+});
+
+// Show the Admin Panel
+router.get('/admin', (req, res) => { // put this back in later middleware.isThisUserAdmin, (req, res) => {
+    Campground
+        .find()
+        .exec((err, campgrounds) => {
+            if (err) {
+                res.flash('danger', 'An error occured while getting campgrounds for the admin panel');
+                res.redirect('/campgrounds');
+            } else {
+                //put the campgrounds into locals for use in the template
+                res.locals.campgrounds = campgrounds.map(campground => {
+                    return {
+                        id: campground._id,
+                        name: campground.name,
+                        image: campground.image,
+                        description: campground.description,
+                        price: ((campground.priceInCents / 100).toFixed(2)),
+                        location: campground.location,
+                        lat: campground.lat,
+                        lng: campground.lng,
+                        author: campground.author,
+                        created: campground.created,
+                        updated: campground.updated
+                    };
+                });
+
+                //now get the users
+                User.find()
+                    .exec((err, users) => {
+                        if (err) {
+                            res.flash('danger', 'An error occured while getting users for the admin panel');
+                            res.redirect('/campgrounds');
+                        } else {
+                            res.locals.users = users.map(user => {
+                                return {
+                                    id: user._id,
+                                    username: user.username,
+                                    password: '********',
+                                    name: user.displayName,
+                                    created: user.created,
+                                    updated: user.updated,
+                                    isAdmin: user.isAdmin
+                                };
+                            });
+
+                            res.render('users/admin');
+                        }
+                    });
+            }
+        });
 });
 
 // Show Register Form
@@ -56,7 +109,7 @@ router.post('/register', (req, res) => {
 
     if (!isValidInput('username', username)) {
         makeSessionVars();
-        res.flash('warning', 'Not a valid username: alpha-numeric, must start with a letter, at least 6 characters');
+        res.flash('warning', 'Not a valid username: alpha-numeric, must start with a letter, at least 6 characters'+username);
         return res.redirect('/register');
     }
 
@@ -117,7 +170,7 @@ function isValidInput(type, input) {
         username: {
             // disable eslint for this line since the string represents an uncompiled regex
             // eslint-disable-next-line no-useless-escape
-            pattern: '[a-zA-Z]{1}[a-zA-Z\-_]{5,20}'
+            pattern: '[a-zA-Z]{1}[a-zA-Z0-9_-]{5,20}'
         },
         password: {
             pattern: '[a-zA-Z0-9]{5,20}'
@@ -125,7 +178,7 @@ function isValidInput(type, input) {
         displayName: {
             // disable eslint for this line since the string represents an uncompiled regex
             // eslint-disable-next-line no-useless-escape
-            pattern: '[a-zA-Z0-9\-_]{3,20}'
+            pattern: '[a-zA-Z0-9_-]{3,20}'
         }
     };
 

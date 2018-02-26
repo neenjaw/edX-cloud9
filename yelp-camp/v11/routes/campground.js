@@ -13,6 +13,7 @@ const geocoder   = require('geocoder');
 
 const Campground = require('../models/campground');
 const Comment = require('../models/comment');
+const User = require('../models/user');
 
 // ============================
 // Campground Routes
@@ -75,9 +76,14 @@ router.post('/', middleware.isLoggedIn, (req, res) => {
                     res.flash('danger', `An error was encountered: ${err.message}`);
                     res.redirect('/campgrounds');
                 } else {
-                    campground.lat = data.results[0].geometry.location.lat;
-                    campground.lng = data.results[0].geometry.location.lng;
-                    campground.location = data.results[0].formatted_address;
+                    if (data.status === 'OK') {
+                        campground.lat = data.results[0].geometry.location.lat;
+                        campground.lng = data.results[0].geometry.location.lng;
+                        campground.location = data.results[0].formatted_address;
+                    } else {
+                        campground.lat = 51.0486;
+                        campground.lng = 114.0708;
+                    }
 
                     Campground
                         .create(campground, (err, newCampground) => {
@@ -86,6 +92,9 @@ router.post('/', middleware.isLoggedIn, (req, res) => {
                                 res.flash('danger', `An error was encountered: ${err}`);
                                 res.redirect('back');
                             } else {
+                                req.user.campgrounds.push(newCampground._id);
+                                req.user.save();
+
                                 res.flash('info', 'Your campsite has been created.');
                                 res.redirect('/campgrounds');
                             }
@@ -224,29 +233,35 @@ router.delete('/:id', middleware.isThisCampgroundOwner, (req, res) => {
     if (!id) {
         res.redirect('/campgrounds');
     } else {
+        //delete the campground
         Campground
             .findByIdAndRemove(id, (err, campground) => {
                 if (err) {
                     console.log(err);
-                    res.flash('danger', `An error was encountered: ${err}`);
+                    res.flash('danger', `An error was encountered deleting the campground: ${err}`);
                     res.redirect(`/campgrounds/${id}`);
-                } else {         
+                } else {       
+                    //delete the comments on the campground
+                    Comment
+                        .remove({ _id: campground.comments }, (err) => {
+                            if (err) {
+                                res.flash('danger', `An error was encountered deleting the comments: ${err}`);
+                                res.redirect(`/campgrounds/${id}`);
+                            } else {
+                                //delete the references to the comments on the campground
+                                const query = { $pull: { campgrounds: id, comments: { $in: campground.comments }}};
+                                User.findByIdAndUpdate(req.user._id, query, (err) => {
+                                    if (err) {
+                                        res.flash('danger', `An error was encountered deleting the campground from the user history: ${err}`);
+                                        res.redirect(`/campgrounds/${id}`);
+                                    } else {
 
-                    campground.comments.forEach(commentId => {
-
-                        Comment
-                            .findByIdAndRemove(commentId, (err) => {
-                                if (err) {
-                                    // console.log(err);
-                                } else {
-                                    // console.log('Comment deleted');                                
-                                }
-                            });             
-                                       
-                    });
-
-                    res.flash('info', 'Your campsite was deleted');
-                    res.redirect('/campgrounds');
+                                        res.flash('info', 'Your campsite was deleted');
+                                        res.redirect('/campgrounds');
+                                    }
+                                });
+                            }
+                        });
                 }
             });
     }

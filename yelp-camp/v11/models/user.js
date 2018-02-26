@@ -7,6 +7,18 @@ module.exports = (function () {
         username: String,
         password: String,
         displayName: { type: String, unique: true, required: true },
+        campgrounds: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Campground'
+            }
+        ],
+        comments: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Comment'
+            }
+        ],
         created: {
             type: Date, default: Date.now
         },
