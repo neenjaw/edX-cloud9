@@ -24,7 +24,7 @@ const User = require('../models/user');
 // ============================
 
 // Show User Profile Page
-router.get('/:uid', (req, res) => { // TODO: remove this <-- middleware.isLoggedIn, (req, res) => {
+router.get('/:uid', middleware.isLoggedIn, (req, res) => {
     User.findById(req.params.uid)
         .populate('campgrounds')
         .populate('comments')
@@ -73,17 +73,20 @@ router.get('/:uid/edit', middleware.isThisUserAuthorized, (req, res) => {
         delete res.locals.update;
     }
     
-    res.locals.user = {
-        id: req.user._id,
-        username: req.user.username,
-        name: req.user.displayName,
-        created: req.user.created,
-        updated: req.user.updated,
-        isAdmin: req.user.isAdmin,
-        password: '********'
-    };
+    User.findById(req.params.uid)
+        .exec((err, foundUser) => {
+            res.locals.editUser = {
+                id: foundUser._id,
+                username: foundUser.username,
+                name: foundUser.displayName,
+                created: foundUser.created,
+                updated: foundUser.updated,
+                isAdmin: foundUser.isAdmin,
+                password: '********'
+            };
 
-    res.render('users/edit');
+            res.render('users/edit');
+        });
 });
 
 router.put('/:uid', middleware.isThisUserAuthorized, (req, res) => {
@@ -91,14 +94,13 @@ router.put('/:uid', middleware.isThisUserAuthorized, (req, res) => {
     const update = {};
 
     //the the display name is different, prepare for update
-    update.changeName = (req.body.user.name !== req.user.displayName);
-    update.displayName = req.body.user.name || req.user.displayName;
+    update.displayName = req.body.editUser.name;
 
-    if (req.body.user.oldPassword && req.body.user.newPassword && req.body.user.rptPassword) {
+    if (req.body.editUser.oldPassword && req.body.editUser.newPassword && req.body.editUser.rptPassword) {
         update.changepw = true;
-        update.oldPassword = req.body.user.oldPassword;
-        update.newPassword = req.body.user.newPassword;
-        update.rptPassword = req.body.user.rptPassword;
+        update.oldPassword = req.body.editUser.oldPassword;
+        update.newPassword = req.body.editUser.newPassword;
+        update.rptPassword = req.body.editUser.rptPassword;
 
         if (update.newPassword !== update.rptPassword) {
             res.flash('warning', 'Your new password does not match');
@@ -124,21 +126,17 @@ router.put('/:uid', middleware.isThisUserAuthorized, (req, res) => {
 
     //separated function to update name to make more DRY
     function updateDisplayName() {
-        if (!update.changeName) {
-            res.redirect(`/users/${req.user._id}`);
-        } else {
-            User.findByIdAndUpdate(req.user._id, { $set: { displayName: update.displayName } }, (err, updatedUser) => {
-                if (err) {
-                    makeSessionVarsForErr();
+        User.findByIdAndUpdate(req.user._id, { $set: { displayName: update.displayName } }, (err, updatedUser) => {
+            if (err) {
+                makeSessionVarsForErr();
 
-                    res.flash('danger', 'There was a problem updating your name. Try again later.');
-                    res.redirect(`/users/${req.user._id}`);
-                } else {
-                    res.flash('success', 'Your name has been changed.');
-                    res.redirect(`/users/${req.user._id}`);
-                }
-            });
-        }
+                res.flash('danger', 'There was a problem updating your name. Try again later.');
+                res.redirect(`/users/${req.user._id}`);
+            } else {
+                res.flash('success', 'Your name has been changed.');
+                res.redirect(`/users/${req.user._id}`);
+            }
+        });
     }
 
     function makeSessionVarsForErr() {
@@ -154,5 +152,21 @@ router.put('/:uid', middleware.isThisUserAuthorized, (req, res) => {
 });
 
 //TODO: Need a user delete route
+router.delete('/:uid', (req, res) => {
+    // const uid = req.params.uid;
+
+    // User.findByIdAndRemove(uid, (err, foundUser) => {
+    //     if (err) {
+    //         console.log(err);
+    //         res.flash('danger', 'An error was encountered deleting the user');
+    //         res.redirect('back');
+    //     } else {
+    //         Campground
+    //             .find({author: uid})
+                
+    //     }
+    // });
+});
+
 
 module.exports = router;

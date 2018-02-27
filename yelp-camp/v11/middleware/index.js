@@ -132,7 +132,7 @@ middlewareObj.isThisUserAuthorized = function (req, res, next) {
                     }
 
                     //is this the user?
-                    if (!user.equals(req.user._id)) {
+                    if (!user.equals(req.user._id) && !req.user.isAdmin) {
                         res.flash('danger', 'You are not authorized to view this user!');
                         res.redirect('back');
                     } else {

@@ -12,22 +12,23 @@
     <div class="col-12">
       <!-- <p class="lead">YelpCamp</p> -->
 
-        <form action="/users/<%= user.id %>?_method=PUT" method="POST">
+        <form action="/users/<%= editUser.id %>?_method=PUT" method="POST">
             <div class="form-group">
                 <label for="username">Username</label>
-                <input type="text" class="form-control" id="username" name="user[username]" value="<%= user.username %>" 
+            res.render('users/show');
+                <input type="text" class="form-control" id="username" name="editUser[username]" value="<%= editUser.username %>" 
                     placeholder="Username" aria-describedby="usernameDesc" pattern="[a-zA-Z]{1}[a-zA-Z\-_]{5,20}" required readonly>
                 <% if (user.isAdmin) { %><small id="usernameDesc" class="form-text">This user is an administrator.</small><% } %>
             </div>
             <div class="form-group">
                 <label for="name">Name - <a class="toggle-name" href="javascript:void(0);">change</a></label>
-                <input type="text" class="form-control" id="name" name="user[name]" value="<%= (update) ? update.name : user.name %>" 
-                    placeholder="Username" pattern="[a-zA-Z0-9\-_]{3,20}" data-name="<%= user.name %>" readonly>
+                <input type="text" class="form-control" id="name" name="editUser[name]" value="<%= (update) ? update.name : editUser.name %>" 
+                    placeholder="Username" pattern="[a-zA-Z0-9\-_]{3,20}" data-name="<%= editUser.name %>" readonly>
             </div>
             <div id="passwordGroup">
             </div>
             <button class="btn btn-primary hidden mb-2" type="submit">Submit changes</button>
-            <p class="text-muted">Account created <%= moment(user.created).fromNow() %><% if (user.updated) { %>, last updated <%= moment(user.updated).fromNow() %>.<% } else { %>.<% } %></p>
+            <p class="text-muted">Account created <%= moment(editUser.created).fromNow() %><% if (editUser.updated) { %>, last updated <%= moment(editUser.updated).fromNow() %>.<% } else { %>.<% } %></p>
         </form>
 
     </div>
@@ -39,22 +40,22 @@
 
 const passwordDefault = `<div class="form-group">
                             <label for="password">Password - <a class="toggle-password" href="javascript:void(0);">change password</a></label>
-                            <input type="text" class="form-control" id="password" name="user[password]" value="<%= user.password %>" placeholder="Password" readonly>
+                            <input type="text" class="form-control" id="password" name="editUser[password]" value="<%= editUser.password %>" placeholder="Password" readonly>
                         </div>`;
 
 const passwordSubForm = `<div class="grouping">
     <div class="form-group">
         <label for="oldPassword">Old Password - <a class="toggle-password" href="javascript:void(0);">cancel password change</a></label>
-        <input type="password" class="form-control" id="oldPassword" name="user[oldPassword]" value="" placeholder="Password" required>
+        <input type="password" class="form-control" id="oldPassword" name="editUser[oldPassword]" value="" placeholder="Password" required>
     </div>
     <div class="form-group">
         <label for="newPassword">New Password</label>
-        <input type="text" class="form-control" id="newPassword" name="user[newPassword]" value="<%= (update) ? update.newPassword :  user.newPassword %>" 
+        <input type="text" class="form-control" id="newPassword" name="editUser[newPassword]" value="<%= (update) ? update.newPassword :  editUser.newPassword %>" 
             pattern="[a-zA-Z0-9]{5,20}" placeholder="Password" required>
     </div>
     <div class="form-group">
         <label for="rptPassword">Repeat Password</label>
-        <input type="text" class="form-control" id="rptPassword" name="user[rptPassword]" value="<%= (update) ? update.rptPassword : user.rptPassword %>" 
+        <input type="text" class="form-control" id="rptPassword" name="editUser[rptPassword]" value="<%= (update) ? update.rptPassword : editUser.rptPassword %>" 
             pattern="[a-zA-Z0-9]{5,20}" placeholder="Password" required>
         <div class="feedback"></div>
     </div>

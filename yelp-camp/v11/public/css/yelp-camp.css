@@ -102,6 +102,11 @@ body > div:first-of-type {
   height: auto;
 }
 
+.profile-title {
+  display: flex;
+  justify-content: space-between;
+}
+
 #usernameDesc {
   color: darkred;
 }

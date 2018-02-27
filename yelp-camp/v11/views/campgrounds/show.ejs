@@ -31,7 +31,7 @@
               <% } else { %>
                 Last updated <%= moment(campground.updated).fromNow() %>
               <% } %>
-                by <%= campground.author.name %>
+                by <a href="/users/<%= campground.author.id %>"><%= campground.author.name %></a>
             </small>
             <div>
               <% if (user && (campground.author.id.equals(user.id) || user.isAdmin)) { %>
@@ -66,7 +66,7 @@
                 "<%= comment.text %>"
               </p>
               <div class="clearfix">
-                <span><i class="fas fa-user"></i> <%= comment.author.name %></span>
+                <span><a href="/users/<%= campground.author.id %>"><i class="fas fa-user"></i></a> <a href="/users/<%= campground.author.id %>"><%= comment.author.name %></a></span>
                 <% if (user && (comment.author.id.equals(user.id) || user.isAdmin)) { %>
                   <form class="pl-1 float-right pl-1" action="/campgrounds/<%= campground.id %>/comments/<%= comment.id %>?_method=DELETE" method="POST">
                     <button class="btn btn-sm btn-danger"><i class="fas fa-times"></i> Delete</button>

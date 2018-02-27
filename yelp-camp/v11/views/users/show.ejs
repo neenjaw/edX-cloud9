@@ -4,11 +4,19 @@
 
 <div class="container">
     <% include ../partials/flash %>
-
-    <h2 class="mb-1"><%= profileUser.name %>'s profile:</h2>
-    <p class="text-muted"><small>Member for <%= moment(profileUser.created).fromNow(true) %>.</small></p>
-    <% //TODO: Add in a link to get to the profile edit route %>
+    <div class="profile-title">
+        <div>
+            <h2 class="mb-1"><%= profileUser.name %>'s profile:</h2>
+            <p class="text-muted"><small>Member for <%= moment(profileUser.created).fromNow(true) %>.</small></p>
+        </div>
+        <div>
+            <% if (profileUser.id.equals(user.id) || user.isAdmin) { %>
+            <a class="btn btn-sm btn-outline-warning" href="/users/<%= profileUser.id %>/edit"><i class="far fa-edit user-edit"></i> Edit profile</a>
+            <% } %>
+        </div>
+    </div>
 </div>
+
 <div class="container mb-3">
     <h4><%= profileUser.name %>'s campgrounds:</h4>
 

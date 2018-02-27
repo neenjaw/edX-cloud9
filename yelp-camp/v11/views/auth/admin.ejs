@@ -37,7 +37,7 @@
                     </td>
                     <td><%- (user.isAdmin) ? '<i class="far fa-check-square"></i>':'<i class="far fa-square"></i>' %></td>
                     <td>
-                        <a class="btn btn-sm btn-outline-warning" href="#" data-user-target="<%= user.id %>"><i class="far fa-edit user-edit"></i></a>
+                        <a class="btn btn-sm btn-outline-warning" href="/users/<%= user.id %>/edit"><i class="far fa-edit user-edit"></i></a>
                         <form class="admin-del-form" action="/users/<%= user.id %>?_method=DELETE" method="POST">
                             <button class="btn btn-sm btn-outline-danger"><i class="fas fa-minus-circle user-delete"></i></a>
                         </form>
