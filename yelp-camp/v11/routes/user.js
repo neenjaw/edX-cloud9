@@ -153,19 +153,62 @@ router.put('/:uid', middleware.isThisUserAuthorized, (req, res) => {
 
 //TODO: Need a user delete route
 router.delete('/:uid', (req, res) => {
-    // const uid = req.params.uid;
+    const uid = req.params.uid;
 
-    // User.findByIdAndRemove(uid, (err, foundUser) => {
-    //     if (err) {
-    //         console.log(err);
-    //         res.flash('danger', 'An error was encountered deleting the user');
-    //         res.redirect('back');
-    //     } else {
-    //         Campground
-    //             .find({author: uid})
-                
-    //     }
-    // });
+
+    // 1. Delete User
+    // 2. make a list of all the campgrounds
+    // 3. make a list of all the comments associated with all of the campgrounds
+    // 4. delete the campgrounds
+    // 5. delete the comments
+    // 6. Update user's comments ref
+    // 7. update campground comments ref
+
+    // 1.
+    User.findById(uid)
+        .populate({
+            path: 'campgrounds',
+            populate: {
+                path: 'comments' 
+            }
+        })
+        .exec((err, rUser) => {
+            if(err) {
+                console.log(err);
+                res.flash('danger', 'An error was encountered deleting the user');
+                res.redirect('back');
+            } else {
+                // 2.
+                const rCampgrounds = rUser.campgrounds;
+                const rComments = rCampgrounds
+                    .reduce((accumulator, currentValue) => accumulator.concat(currentValue.comments), removedUser.comments);
+
+                const affectedUsers = rComments.map(comment => comment.author);
+                const affectedComments = rComments.map(comment => comment._id);
+                const affectedCampgrounds = rComments.map(comment => comment.campground);
+
+                User.updateMany(
+                    { _id : { $in: affectedUsers }},
+                    { comments: { $pull: { $in: affectedComments }}},
+                    (err) => {
+
+                        Campground
+                            .updateMany(
+                                { _id : { $in : affectedCampgrounds }},
+                                { comments: { $pull: { $in: affectedComments }}},
+                                (err) => {
+
+                                    // //still need to remove the comments
+                                    // Comment.deleteMany()
+                                    // //still need to remove the user
+                                    // User.findByIdAndRemove()
+                                    // //still need to remove the campground
+                                    // Campground.findByIdAndRemove
+                                });
+                    });
+            }
+
+        });
 });
 
 
