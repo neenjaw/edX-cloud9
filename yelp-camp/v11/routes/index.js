@@ -31,6 +31,7 @@ router.get('/', (req, res) => {
 router.get('/admin', (req, res) => {  // TODO: remove this <-- put this back in later middleware.isThisUserAdmin, (req, res) => {
     Campground
         .find()
+        .populate('author')
         .exec((err, campgrounds) => {
             if (err) {
                 res.flash('danger', 'An error occured while getting campgrounds for the admin panel');
@@ -47,7 +48,10 @@ router.get('/admin', (req, res) => {  // TODO: remove this <-- put this back in 
                         location: campground.location,
                         lat: campground.lat,
                         lng: campground.lng,
-                        author: campground.author,
+                        author: {
+                            username: campground.author.username,
+                            name: campground.author.displayName
+                        },
                         created: campground.created,
                         updated: campground.updated
                     };

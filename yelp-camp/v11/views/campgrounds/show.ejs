@@ -45,10 +45,61 @@
           </p>
         </div>
         <div class="card-footer">
+          <!--
+          Old Comment Button
+
           <div class="text-right">
             <a class="btn btn-success" href="/campgrounds/<%= campground.id %>/comments/new"><i class="fas fa-plus"></i> Add new Comment</a>
           </div>
+          -->
+
+          <!--
+          New Comment Start
+          -->        
+          <div>
+            <!--Setting up the add new comment button that is used for collapsing-->
+            <div class="show-comment-header mb-2">
+              <!--Comment section title-->
+              <h4><strong>Comments <i class="fas fa-comment"></i></strong></h4>
+
+              <a class="btn btn-success pull-right" role="button" data-toggle="collapse" href="#collapseComment" aria-expanded="false" aria-controls="collapseComment">
+                <i class="fas fa-plus"></i>  Add new comment
+              </a>
+            </div>
+
+            <!--Collapse Add a comment form START-->
+            <div class="collapse" id="collapseComment">
+              <div class="card card-body" style="border-left: 5px solid #00C851;">
+                <% if (!user) { %>
+                  <!--If the user is not logged in, direct him to the login page-->
+                  <h5>You need to login before you can comment. <a href="/login">Click here</a> to go to the login page.</h5>
+                <% } %>
+                <% if (user) { %>
+                  <!--If the user is logged in, show the new comment form-->
+                  <h4>Write your comment <i class="fas fa-pencil-alt"></i></h4>
+                  <form id="add-comment-form" action="/campgrounds/<%= campground.id %>/comments" method="POST">
+                    <div class="form-group">
+                      <input class="form-control" type="text" disabled value="<%= user.name %>">
+                    </div>
+                    <div class="form-group">
+                      <textarea class="form-control" name="comment[text]" placeholder="Write your comment..." form="add-comment-form" rows="5" cols="70"></textarea>
+                    </div>
+                    <div class="form-group">
+                      <button class="btn btn-success btn-sm">Comment <i class="fas fa-comment"></i></button>
+                    </div>
+                  </form>
+                <% } %>
+              </div>
+            </div>
+            <!--Collapse Add a comment form END-->
+          </div>
+          <!--
+          New Comment End
+          -->
+
+          <% if (campground.comments.length > 0) { %>
           <hr>
+          <% } %>
           <% campground.comments.forEach((comment, index) => { %>
           <div class="row">
             <div class="col-md-12">
@@ -106,7 +157,7 @@
       <strong><%= campground.name %><br />
       <%= campground.location %></strong>
       <p><%= campground.description %></p>
-    `
+    `;
     const infowindow = new google.maps.InfoWindow({
       content: contentString
     });

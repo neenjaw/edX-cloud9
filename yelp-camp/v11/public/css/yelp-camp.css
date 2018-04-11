@@ -125,3 +125,13 @@ i.fas.fa-user {
   /* text-shadow: 0px 0px 1px black; */
   font-size: 0.8rem;
 }
+
+.show-comment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.show-comment-header h4 {
+  margin: 0;
+}

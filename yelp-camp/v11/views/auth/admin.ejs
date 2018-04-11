@@ -69,7 +69,7 @@
                     <th scope="row"><%= (idx+1) %></th>
                     <td><%= campground.name %></td>
                     <td><%= campground.location %></td>
-                    <td>Author</td>
+                    <td><%= campground.author.name %> (<%= campground.author.username %>)</td>
                     <td>
                         <a class="btn btn-sm btn-outline-secondary" href="/campgrounds/<%= campground.id %>"><i class="fas fa-link"></i></a>
                     </td>
